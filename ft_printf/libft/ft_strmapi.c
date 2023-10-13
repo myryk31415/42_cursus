@@ -1,38 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/13 14:43:22 by padam             #+#    #+#             */
-/*   Updated: 2023/10/13 22:54:31 by padam            ###   ########.fr       */
+/*   Created: 2023/10/09 14:29:52 by padam             #+#    #+#             */
+/*   Updated: 2023/10/10 14:29:59 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#include "libft.h"
 
-typedef struct s_flags
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	char	conversion;
-	int		precision;
-	int		hashtag;
-	int		plus;
-	int		space;
-	int		min_width;
-	int		minus;
-	int		zero;
-}	t_flags;
+	int		i;
+	char	*s2;
 
-//cases
-t_list	*character(int c);
-t_list	*string(char *str);
-t_list	*pointer(void *ptr);
-t_list	*integer(long integer);
-
-//lst_functions
-void	*ctop(char c);
-void	print_content(void *ptr);
-
-#endif
+	i = 0;
+	s2 = malloc((ft_strlen(s) + 1) * sizeof(char));
+	if (!s2)
+		return (NULL);
+	while (*s)
+	{
+		s2[i] = (*f)(i, *s++);
+		i++;
+	}
+	s2[i] = '\0';
+	return (s2);
+}

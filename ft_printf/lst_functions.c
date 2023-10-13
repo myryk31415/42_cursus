@@ -1,38 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*   lst_functions.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/13 14:43:22 by padam             #+#    #+#             */
-/*   Updated: 2023/10/13 22:54:31 by padam            ###   ########.fr       */
+/*   Created: 2023/10/13 17:26:04 by padam             #+#    #+#             */
+/*   Updated: 2023/10/13 21:53:46 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#include "libft.h"
+#include "ft_printf.h"
 
-typedef struct s_flags
+void	*ctop(char c)
 {
-	char	conversion;
-	int		precision;
-	int		hashtag;
-	int		plus;
-	int		space;
-	int		min_width;
-	int		minus;
-	int		zero;
-}	t_flags;
+	void	*ptr;
 
-//cases
-t_list	*character(int c);
-t_list	*string(char *str);
-t_list	*pointer(void *ptr);
-t_list	*integer(long integer);
+	ptr = malloc(sizeof(char));
+	if (!ptr)
+		return (NULL);
+	*(char *)ptr = c;
+	return (ptr);
+}
 
-//lst_functions
-void	*ctop(char c);
-void	print_content(void *ptr);
-
-#endif
+void	print_content(void *ptr)
+{
+	ft_putchar_fd(*(char *)ptr, 1);
+}

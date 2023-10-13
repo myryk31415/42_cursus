@@ -1,38 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/13 14:43:22 by padam             #+#    #+#             */
-/*   Updated: 2023/10/13 22:54:31 by padam            ###   ########.fr       */
+/*   Created: 2023/10/07 17:42:45 by padam             #+#    #+#             */
+/*   Updated: 2023/10/10 12:59:21 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#include "libft.h"
 
-typedef struct s_flags
+void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
-	char	conversion;
-	int		precision;
-	int		hashtag;
-	int		plus;
-	int		space;
-	int		min_width;
-	int		minus;
-	int		zero;
-}	t_flags;
+	void	*ptr;
 
-//cases
-t_list	*character(int c);
-t_list	*string(char *str);
-t_list	*pointer(void *ptr);
-t_list	*integer(long integer);
-
-//lst_functions
-void	*ctop(char c);
-void	print_content(void *ptr);
-
-#endif
+	ptr = dst;
+	if (!dst && !src)
+		return (dst);
+	while (n--)
+	{
+		*(unsigned char *)dst = *(unsigned char *)src;
+		src++;
+		dst++;
+	}
+	return (ptr);
+}

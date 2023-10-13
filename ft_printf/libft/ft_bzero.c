@@ -1,38 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/13 14:43:22 by padam             #+#    #+#             */
-/*   Updated: 2023/10/13 22:54:31 by padam            ###   ########.fr       */
+/*   Created: 2023/10/07 15:56:53 by padam             #+#    #+#             */
+/*   Updated: 2023/10/10 16:23:18 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#include "libft.h"
 
-typedef struct s_flags
+void	ft_bzero(void *s, size_t n)
 {
-	char	conversion;
-	int		precision;
-	int		hashtag;
-	int		plus;
-	int		space;
-	int		min_width;
-	int		minus;
-	int		zero;
-}	t_flags;
+	size_t	i;
 
-//cases
-t_list	*character(int c);
-t_list	*string(char *str);
-t_list	*pointer(void *ptr);
-t_list	*integer(long integer);
-
-//lst_functions
-void	*ctop(char c);
-void	print_content(void *ptr);
-
-#endif
+	i = 0;
+	while (i < n)
+	{
+		*(char *)s = '\0';
+		s++;
+		i++;
+	}
+}

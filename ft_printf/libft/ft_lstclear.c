@@ -1,38 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*   ft_lstclear.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/13 14:43:22 by padam             #+#    #+#             */
-/*   Updated: 2023/10/13 22:54:31 by padam            ###   ########.fr       */
+/*   Created: 2023/10/11 14:43:37 by padam             #+#    #+#             */
+/*   Updated: 2023/10/11 16:14:47 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#include "libft.h"
 
-typedef struct s_flags
+void	ft_lstclear(t_list **lst, void (*del)(void*))
 {
-	char	conversion;
-	int		precision;
-	int		hashtag;
-	int		plus;
-	int		space;
-	int		min_width;
-	int		minus;
-	int		zero;
-}	t_flags;
-
-//cases
-t_list	*character(int c);
-t_list	*string(char *str);
-t_list	*pointer(void *ptr);
-t_list	*integer(long integer);
-
-//lst_functions
-void	*ctop(char c);
-void	print_content(void *ptr);
-
-#endif
+	if (*lst)
+	{
+		if ((*lst)->next)
+			ft_lstclear(&((*lst)->next), *del);
+		(*del)((*lst)->content);
+		free(*lst);
+	}
+	*lst = NULL;
+}
