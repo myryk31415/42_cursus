@@ -1,27 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strtrim.c                                       :+:      :+:    :+:   */
+/*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/09 11:25:28 by padam             #+#    #+#             */
-/*   Updated: 2023/10/14 16:56:03 by padam            ###   ########.fr       */
+/*   Created: 2023/10/14 17:03:17 by padam             #+#    #+#             */
+/*   Updated: 2023/10/14 17:48:59 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
 
-char	*ft_strtrim(char const *s, char const *set)
+int	main()
 {
-	int		start;
-	int		end;
-
-	start = 0;
-	end = ft_strlen(s);
-	while (ft_strchr(set, s[start]) && *set && *s)
-		start++;
-	while (ft_strchr(set, s[end]) && *set && *s)
-		end--;
-	return (ft_substr((s), start, end - start + 1));
+	ft_printf("%%", "hi");
 }

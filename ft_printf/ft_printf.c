@@ -6,12 +6,12 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 19:20:42 by padam             #+#    #+#             */
-/*   Updated: 2023/10/13 23:01:16 by padam            ###   ########.fr       */
+/*   Updated: 2023/10/14 17:45:19 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include <stdarg.h>
-#include "libft.h"
 #include "ft_printf.h"
 
 static char	*skip_number(char *str)
@@ -60,30 +60,30 @@ static void	read_flags(char *str, t_flags *flags)
 
 static int	handle(va_list args, t_flags *flags)
 {
-	t_list	*output;
-	int		count;
+	t_listchar	*output;
+	int			count;
 
 	if (flags->conversion == 'c')
 		output = character((unsigned char)va_arg(args, int));
 	if (flags->conversion == 's')
-		output = string(va_arg(args, char *));
+		output = string(va_arg(args, char *), flags->precision);
 	if (flags->conversion == 'p')
 		output = pointer(va_arg(args, void *));
 	if (flags->conversion == 'd')
-		output = integer((long)va_arg(args, int));
+		output = integer((long)va_arg(args, int), flags->precision);
 	if (flags->conversion == 'i')
-		output = integer((long)va_arg(args, int));
+		output = integer((long)va_arg(args, unsigned int), flags->precision);
 	if (flags->conversion == 'u')
-		output = integer((long)va_arg(args, unsigned int));
+		output = integer((long)va_arg(args, unsigned int), flags->precision);
 	if (ft_strchr("xX", flags->conversion))
-		output = integer((long)va_arg(args, unsigned int));
+		output = integer((long)va_arg(args, unsigned int), flags->precision);
 	if (flags->conversion == '%')
-		output = ft_lstnew(ctop('%'));
+		output = ft_lstcharnew('%');
 	if (!output)
-		return (NULL);
-	ft_lstiter(output, print_content);
-	count = ft_lstsize(output);
-	ft_lstclear(output, free);
+		return (0);
+	ft_lstchariter(output, print_content);
+	count = ft_lstcharsize(output);
+	ft_lstcharclear(&output);
 	return (count);
 }
 
@@ -97,13 +97,18 @@ int	ft_printf(const char *str, ...)
 	va_start(args, str);
 	while (*str)
 	{
-		while (*str != '%')
+		while (*str != '%' && *str)
 		{
 			ft_putchar_fd(*str++, 1);
 			count++;
 		}
-		read_flags((char *)str, &flags);
-		count += handle(args, &flags);
+		if (*str)
+		{
+			read_flags((char *)++str, &flags);
+			count += handle(args, &flags);
+			while (ft_strchr("cspdiuxX%", *str))
+				str++;
+		}
 	}
 	return (count);
 }

@@ -6,53 +6,69 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 16:24:35 by padam             #+#    #+#             */
-/*   Updated: 2023/10/13 22:54:18 by padam            ###   ########.fr       */
+/*   Updated: 2023/10/14 17:02:56 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "ft_printf.h"
 
-t_list	*character(int c)
+t_listchar	*character(int c)
 {
-	void	*cont;
-
-	cont = ctop(c);
-	if (!cont)
-		return (NULL);
-	return (ft_lstnew(cont));
+	return (ft_lstcharnew(c));
 }
 
-t_list	*string(char *str)
+t_listchar	*string(char *str, int precision)
 {
-	t_list	**lst;
-	t_list	*new;
-	void	*cont;
+	t_listchar	**lst;
+	t_listchar	*new;
+	int			i;
 
+	i = 0;
 	lst = NULL;
-	while (*str)
+	while (*str && (i++ < precision || precision < 0))
 	{
-		cont = ctop(*str++);
-		new = ft_lstnew(cont);
-		if (!new || !cont)
+		new = ft_lstcharnew(*str);
+		if (!new)
 		{
-			ft_lstclear(lst, free);
-			free (cont);
+			ft_lstcharclear(lst);
 			return (NULL);
 		}
-		ft_lstadd_back(lst, new);
+		ft_lstcharadd_back(lst, new);
 	}
 	return (*lst);
 }
 
-t_list	*pointer(void *ptr)
+t_listchar	*pointer(void *ptr)
 {
 	ptr = NULL;
 	return (0);
 }
 
-t_list	*integer(long integer)
+t_listchar	*integer(long integer, int precision)
 {
-	integer = 0;
+	t_listchar	**lst;
+	t_listchar	*new;
+	int			i;
+	int			negative;
+
+	i = 0;
+	lst = NULL;
+	negative = (integer < 0);
+	while (integer || i++ < precision || negative)
+	{
+		if (integer)
+			new = ft_lstcharnew('0' + integer % 10);
+		else if (i - 1 < precision)
+			new = ft_lstcharnew('0');
+		else if (negative--)
+			new = ft_lstcharnew('-');
+		if (!new)
+		{
+			ft_lstcharclear(lst);
+			return (NULL);
+		}
+		ft_lstcharadd_front(lst, new);
+		integer /= 10;
+	}
 	return (0);
 }

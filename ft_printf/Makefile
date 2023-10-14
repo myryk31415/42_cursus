@@ -6,7 +6,7 @@
 #    By: padam <padam@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/09 15:34:56 by padam             #+#    #+#              #
-#    Updated: 2023/10/13 22:38:26 by padam            ###   ########.fr        #
+#    Updated: 2023/10/14 13:18:00 by padam            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,12 +16,12 @@ OBJS = $(SRCS:.c=.o)
 CFLAGS = -Wall -Wextra -Werror -I. -Ilibft
 LIBFT_DIR = libft
 
-all: $(NAME)
+all: $(NAME) clean
 
 $(NAME): $(LIBFT_DIR)/libft.a $(OBJS)
 	ar -rcs $(NAME) $(OBJS) $(LIBFT_DIR)/libft.a
 
-libft/libft.a:
+$(LIBFT_DIR)/libft.a:
 	make -C $(LIBFT_DIR)
 
 %.o: %.c
