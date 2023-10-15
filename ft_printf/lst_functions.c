@@ -6,18 +6,24 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 17:26:04 by padam             #+#    #+#             */
-/*   Updated: 2023/10/14 13:10:50 by padam            ###   ########.fr       */
+/*   Updated: 2023/10/15 21:54:38 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-void	print_content(char c)
+void	ft_toupperchar(unsigned char *c)
 {
-	ft_putchar_fd(c, 1);
+	if (*c >= 97 && *c <= 122)
+		*c -= 32;
 }
 
-t_listchar	*ft_lstcharnew(char c)
+void	print_content(unsigned char *c)
+{
+	ft_putchar_fd(*c, 1);
+}
+
+t_listchar	*ft_lstcharnew(unsigned char c)
 {
 	t_listchar	*new_node;
 
@@ -53,30 +59,36 @@ t_listchar	*ft_lstcharlast(t_listchar *lst)
 	return (lst);
 }
 
-void	ft_lstcharadd_back(t_listchar **lst, t_listchar *new)
+void	*ft_lstcharadd_back(t_listchar **lst, t_listchar *new)
 {
+	if (!new)
+		return (NULL);
 	if (*lst)
 		ft_lstcharlast(*lst)->next = new;
 	else
 		*lst = new;
+	return (*lst);
 }
 
-void	ft_lstcharadd_front(t_listchar **lst, t_listchar *new)
+void	*ft_lstcharadd_front(t_listchar **lst, t_listchar *new)
 {
+	if (!new)
+		return (NULL);
 	new->next = *lst;
 	*lst = new;
+	return (*lst);
 }
 
-void	ft_lstchariter(t_listchar *lst, void (*f)(char))
+void	ft_lstchariter(t_listchar *lst, void (*f)(unsigned char*))
 {
 	while (lst)
 	{
-		(*f)(lst->content);
+		(*f)(&lst->content);
 		lst = lst->next;
 	}
 }
 
-void	ft_lstcharclear(t_listchar **lst)
+void	*ft_lstcharclear(t_listchar **lst)
 {
 	if (*lst)
 	{
@@ -85,4 +97,5 @@ void	ft_lstcharclear(t_listchar **lst)
 		free(*lst);
 	}
 	*lst = NULL;
+	return (NULL);
 }

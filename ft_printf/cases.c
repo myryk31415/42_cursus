@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 16:24:35 by padam             #+#    #+#             */
-/*   Updated: 2023/10/14 17:02:56 by padam            ###   ########.fr       */
+/*   Updated: 2023/10/15 23:14:24 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,58 +17,66 @@ t_listchar	*character(int c)
 	return (ft_lstcharnew(c));
 }
 
-t_listchar	*string(char *str, int precision)
+t_listchar	*string(char *str, t_flags *flags)
 {
-	t_listchar	**lst;
-	t_listchar	*new;
+	t_listchar	*lst;
 	int			i;
 
-	i = 0;
+	if (!str)
+		str = "(null)";
 	lst = NULL;
-	while (*str && (i++ < precision || precision < 0))
+	i = 0;
+	while (*str && (i++ < flags->precision || flags->precision < 0))
 	{
-		new = ft_lstcharnew(*str);
-		if (!new)
-		{
-			ft_lstcharclear(lst);
-			return (NULL);
-		}
-		ft_lstcharadd_back(lst, new);
+		if (!ft_lstcharadd_back(&lst, ft_lstcharnew(*(unsigned char *)str++)))
+			return (ft_lstcharclear(&lst));
 	}
-	return (*lst);
+	return (lst);
 }
 
-t_listchar	*pointer(void *ptr)
+t_listchar	*integer(long long i, t_flags *flags)
 {
-	ptr = NULL;
-	return (0);
-}
-
-t_listchar	*integer(long integer, int precision)
-{
-	t_listchar	**lst;
-	t_listchar	*new;
-	int			i;
+	t_listchar	*lst;
+	int			j;
 	int			negative;
+	int			base;
 
-	i = 0;
+	base = 10 + 6 * (0 < ft_strchr("xXp", flags->conversion));
+	j = 0;
 	lst = NULL;
-	negative = (integer < 0);
-	while (integer || i++ < precision || negative)
+	negative = (i < 0);
+	i += -2 * i * (i < 0);
+	while (i && ++j)
 	{
-		if (integer)
-			new = ft_lstcharnew('0' + integer % 10);
-		else if (i - 1 < precision)
-			new = ft_lstcharnew('0');
-		else if (negative--)
-			new = ft_lstcharnew('-');
-		if (!new)
-		{
-			ft_lstcharclear(lst);
-			return (NULL);
-		}
-		ft_lstcharadd_front(lst, new);
-		integer /= 10;
+		if (!ft_lstcharadd_front(&lst,
+				ft_lstcharnew("0123456789abcdef"[i % base])))
+			return (ft_lstcharclear(&lst));
+		i /= base;
 	}
-	return (0);
+	while (j++ < flags->precision)
+	{
+		if (!ft_lstcharadd_front(&lst, ft_lstcharnew('0')))
+			return (ft_lstcharclear(&lst));
+	}
+	if (negative && !ft_lstcharadd_front(&lst, ft_lstcharnew('-')))
+		return (ft_lstcharclear(&lst));
+	return (lst);
+}
+
+t_listchar	*pointer(unsigned long i, t_flags *flags)
+{
+	t_listchar	*lst;
+	int			base;
+
+	base = 10 + 6 * (0 < ft_strchr("xXp", flags->conversion));
+	lst = NULL;
+	i += -2 * i * (i < 0);
+	while (i)
+	{
+		if (!ft_lstcharadd_front(&lst,
+				ft_lstcharnew("0123456789abcdef"[i % base])))
+			return (ft_lstcharclear(&lst));
+		i /= base;
+	}
+	return (lst);
 }

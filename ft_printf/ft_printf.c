@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 19:20:42 by padam             #+#    #+#             */
-/*   Updated: 2023/10/14 17:45:19 by padam            ###   ########.fr       */
+/*   Updated: 2023/10/15 22:58:29 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,22 @@ static char	*skip_number(char *str)
 	str--;
 	return (str);
 }
+
+static t_listchar	*use_flags(t_listchar *lst, t_flags *flags)
+{
+	if (flags->conversion == 'p')
+	{
+		if (!ft_lstcharadd_front(&lst, ft_lstcharnew('x'))
+			|| !ft_lstcharadd_front(&lst, ft_lstcharnew('0')))
+			return (ft_lstcharclear(&lst));
+	}
+	if (flags->conversion == 'X')
+	{
+		ft_lstchariter(lst, ft_toupperchar);
+	}
+	return (lst);
+}
+
 
 static void	read_flags(char *str, t_flags *flags)
 {
@@ -66,21 +82,22 @@ static int	handle(va_list args, t_flags *flags)
 	if (flags->conversion == 'c')
 		output = character((unsigned char)va_arg(args, int));
 	if (flags->conversion == 's')
-		output = string(va_arg(args, char *), flags->precision);
+		output = string(va_arg(args, char *), flags);
 	if (flags->conversion == 'p')
-		output = pointer(va_arg(args, void *));
+		output = pointer((unsigned long)va_arg(args, void *), flags);
 	if (flags->conversion == 'd')
-		output = integer((long)va_arg(args, int), flags->precision);
+		output = integer((long)va_arg(args, int), flags);
 	if (flags->conversion == 'i')
-		output = integer((long)va_arg(args, unsigned int), flags->precision);
+		output = integer((long)va_arg(args, int), flags);
 	if (flags->conversion == 'u')
-		output = integer((long)va_arg(args, unsigned int), flags->precision);
+		output = integer((long)va_arg(args, unsigned int), flags);
 	if (ft_strchr("xX", flags->conversion))
-		output = integer((long)va_arg(args, unsigned int), flags->precision);
+		output = integer((long)va_arg(args, unsigned int), flags);
 	if (flags->conversion == '%')
 		output = ft_lstcharnew('%');
 	if (!output)
 		return (0);
+	output = use_flags(output, flags);
 	ft_lstchariter(output, print_content);
 	count = ft_lstcharsize(output);
 	ft_lstcharclear(&output);
@@ -106,8 +123,9 @@ int	ft_printf(const char *str, ...)
 		{
 			read_flags((char *)++str, &flags);
 			count += handle(args, &flags);
-			while (ft_strchr("cspdiuxX%", *str))
+			while (!ft_strchr("cspdiuxX%", *str))
 				str++;
+			str++;
 		}
 	}
 	return (count);

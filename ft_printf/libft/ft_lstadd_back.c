@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 14:11:46 by padam             #+#    #+#             */
-/*   Updated: 2023/10/14 12:33:15 by padam            ###   ########.fr       */
+/*   Updated: 2023/10/15 17:04:03 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,7 @@
 void	ft_lstadd_back(t_list **lst, t_list *new)
 {
 	if (*lst)
-	{
 		ft_lstlast(*lst)->next = new;
-	}
 	else
 		*lst = new;
 }
