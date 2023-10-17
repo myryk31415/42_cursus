@@ -6,15 +6,15 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 16:24:35 by padam             #+#    #+#             */
-/*   Updated: 2023/10/15 23:14:24 by padam            ###   ########.fr       */
+/*   Updated: 2023/10/17 17:39:39 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-t_listchar	*character(int c)
+t_listchar	*character(int c, t_flags *flags)
 {
-	return (ft_lstcharnew(c));
+	return (ft_lstcharnew(c, flags));
 }
 
 t_listchar	*string(char *str, t_flags *flags)
@@ -27,10 +27,10 @@ t_listchar	*string(char *str, t_flags *flags)
 	lst = NULL;
 	i = 0;
 	while (*str && (i++ < flags->precision || flags->precision < 0))
-	{
-		if (!ft_lstcharadd_back(&lst, ft_lstcharnew(*(unsigned char *)str++)))
+		if (!ft_lstcharadd_back(&lst,
+				ft_lstcharnew(*(unsigned char *)str++, flags)))
 			return (ft_lstcharclear(&lst));
-	}
+
 	return (lst);
 }
 
@@ -38,45 +38,42 @@ t_listchar	*integer(long long i, t_flags *flags)
 {
 	t_listchar	*lst;
 	int			j;
-	int			negative;
 	int			base;
 
-	base = 10 + 6 * (0 < ft_strchr("xXp", flags->conversion));
+	if (i==0)
+		flags->hashtag = 0;
+	if (i == 0 && flags->precision < 0)
+		return (ft_lstcharnew('0', flags));
+	base = 10 + 6 * (0 < ft_strchr("xX", flags->conversion));
 	j = 0;
 	lst = NULL;
-	negative = (i < 0);
-	i += -2 * i * (i < 0);
+	flags->negative = (i < 0);
+	i -= 2 * i * (i < 0);
 	while (i && ++j)
 	{
 		if (!ft_lstcharadd_front(&lst,
-				ft_lstcharnew("0123456789abcdef"[i % base])))
+				ft_lstcharnew("0123456789abcdef"[i % base], flags)))
 			return (ft_lstcharclear(&lst));
 		i /= base;
 	}
 	while (j++ < flags->precision)
-	{
-		if (!ft_lstcharadd_front(&lst, ft_lstcharnew('0')))
+		if (!ft_lstcharadd_front(&lst, ft_lstcharnew('0', flags)))
 			return (ft_lstcharclear(&lst));
-	}
-	if (negative && !ft_lstcharadd_front(&lst, ft_lstcharnew('-')))
-		return (ft_lstcharclear(&lst));
 	return (lst);
 }
 
 t_listchar	*pointer(unsigned long i, t_flags *flags)
 {
 	t_listchar	*lst;
-	int			base;
 
-	base = 10 + 6 * (0 < ft_strchr("xXp", flags->conversion));
 	lst = NULL;
 	i += -2 * i * (i < 0);
 	while (i)
 	{
 		if (!ft_lstcharadd_front(&lst,
-				ft_lstcharnew("0123456789abcdef"[i % base])))
+				ft_lstcharnew("0123456789abcdef"[i % 16], flags)))
 			return (ft_lstcharclear(&lst));
-		i /= base;
+		i /= 16;
 	}
 	return (lst);
 }
