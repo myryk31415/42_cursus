@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 19:20:42 by padam             #+#    #+#             */
-/*   Updated: 2023/10/17 16:59:06 by padam            ###   ########.fr       */
+/*   Updated: 2023/10/17 21:59:23 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static char	*skip_number(char *str)
 	return (str);
 }
 
-t_flags	*reset_flags(t_flags *flags)
+void	reset_flags(t_flags *flags)
 {
 	flags->precision = -1;
 	flags->hashtag = 0;
@@ -31,11 +31,7 @@ t_flags	*reset_flags(t_flags *flags)
 	flags->minus = 0;
 	flags->zero = 0;
 	flags->min_width = 0;
-	flags->conversion = '%';
 	flags->negative = 0;
-	flags->error = 0;
-	flags->count = 0;
-	return (flags);
 }
 
 static t_listchar	*min_width(t_listchar *lst, t_flags *flags)
@@ -157,9 +153,12 @@ static int	handle(va_list args, t_flags *flags)
 		output = integer((long long)va_arg(args, int), flags);
 	if (ft_strchr("xXu", flags->conversion))
 		output = integer((long long)va_arg(args, unsigned int), flags);
-	output = use_flags(output, flags);
-	ft_lstchariter(output, print_content, flags);
-	flags->count += ft_lstcharsize(output);
+	if (!flags->error)
+		output = use_flags(output, flags);
+	if (!flags->error)
+		ft_lstchariter(output, print_content, flags);
+	if (!flags->error)
+		flags->count += ft_lstcharsize(output);
 	ft_lstcharclear(&output);
 	return (flags->count);
 }
@@ -169,17 +168,19 @@ int	ft_printf(const char *str, ...)
 	va_list	args;
 	t_flags	flags;
 
-	reset_flags(&flags);
+	flags.count = 0;
+	flags.error = 0;
 	va_start(args, str);
-	while (*str)
+	while (*str && !flags.error)
 	{
-		while (*str != '%' && *str)
+		while (*str != '%' && *str && !flags.error)
 		{
 			print_content((unsigned char *)str++, &flags);
 			flags.count++;
 		}
-		if (*str)
+		if (*str && !flags.error)
 		{
+			reset_flags(&flags);
 			read_flags((char *)++str, &flags);
 			handle(args, &flags);
 			while (!ft_strchr("cspdiuxX%", *str))

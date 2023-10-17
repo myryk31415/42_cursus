@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 17:26:04 by padam             #+#    #+#             */
-/*   Updated: 2023/10/17 17:42:53 by padam            ###   ########.fr       */
+/*   Updated: 2023/10/17 20:44:22 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	ft_lstchariter(t_listchar *lst, void (*f)(unsigned char*, t_flags *flags), 
 	int	i;
 
 	i = 0;
-	while (lst)
+	while (lst && !flags->error)
 	{
 		(*f)(&lst->content, flags);
 		lst = lst->next;
