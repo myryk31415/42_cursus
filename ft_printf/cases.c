@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 16:24:35 by padam             #+#    #+#             */
-/*   Updated: 2023/10/17 17:39:39 by padam            ###   ########.fr       */
+/*   Updated: 2023/10/17 23:44:08 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ t_listchar	*string(char *str, t_flags *flags)
 		if (!ft_lstcharadd_back(&lst,
 				ft_lstcharnew(*(unsigned char *)str++, flags)))
 			return (ft_lstcharclear(&lst));
-
 	return (lst);
 }
 
@@ -40,7 +39,7 @@ t_listchar	*integer(long long i, t_flags *flags)
 	int			j;
 	int			base;
 
-	if (i==0)
+	if (i == 0)
 		flags->hashtag = 0;
 	if (i == 0 && flags->precision < 0)
 		return (ft_lstcharnew('0', flags));
