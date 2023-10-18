@@ -6,13 +6,13 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 14:11:46 by padam             #+#    #+#             */
-/*   Updated: 2023/10/11 14:26:24 by padam            ###   ########.fr       */
+/*   Updated: 2023/10/14 12:32:39 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstadd_back(t_list **lst, t_list *new)
+void	ft_lstadd_back(t_listchar **lst, t_listchar *new)
 {
 	if (*lst)
 	{

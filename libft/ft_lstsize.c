@@ -6,13 +6,13 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 14:04:17 by padam             #+#    #+#             */
-/*   Updated: 2023/10/11 14:09:09 by padam            ###   ########.fr       */
+/*   Updated: 2023/10/14 12:32:39 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_lstsize(t_list *lst)
+int	ft_lstsize(t_listchar *lst)
 {
 	int	i;
 

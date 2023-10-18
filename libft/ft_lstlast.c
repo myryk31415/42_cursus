@@ -6,13 +6,13 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 14:07:42 by padam             #+#    #+#             */
-/*   Updated: 2023/10/11 14:11:26 by padam            ###   ########.fr       */
+/*   Updated: 2023/10/14 12:32:39 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_list	*ft_lstlast(t_list *lst)
+t_listchar	*ft_lstlast(t_listchar *lst)
 {
 	if (!lst)
 		return (NULL);

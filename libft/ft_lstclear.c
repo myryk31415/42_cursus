@@ -6,13 +6,13 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 14:43:37 by padam             #+#    #+#             */
-/*   Updated: 2023/10/11 16:14:47 by padam            ###   ########.fr       */
+/*   Updated: 2023/10/14 12:32:39 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstclear(t_list **lst, void (*del)(void*))
+void	ft_lstclear(t_listchar **lst, void (*del)(void*))
 {
 	if (*lst)
 	{
