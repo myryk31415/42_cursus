@@ -6,33 +6,13 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 19:20:42 by padam             #+#    #+#             */
-/*   Updated: 2023/10/17 23:58:11 by padam            ###   ########.fr       */
+/*   Updated: 2023/10/18 18:30:59 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdarg.h>
 #include "ft_printf.h"
-
-static char	*skip_number(char *str)
-{
-	while (ft_isdigit(*str))
-		str++;
-	str--;
-	return (str);
-}
-
-void	reset_flags(t_flags *flags)
-{
-	flags->precision = -1;
-	flags->hashtag = 0;
-	flags->plus = 0;
-	flags->space = 0;
-	flags->minus = 0;
-	flags->zero = 0;
-	flags->min_width = 0;
-	flags->negative = 0;
-}
 
 static t_listchar	*min_width(t_listchar *lst, t_flags *flags)
 {
@@ -75,22 +55,15 @@ static t_listchar	*use_flags(t_listchar *lst, t_flags *flags)
 	if (flags->zero)
 		lst = min_width(lst, flags);
 	if ((ft_strchr("xX", c) && flags->hashtag) || c == 'p')
-	{
-		if (c == 'X' && !ft_lstcharadd_front(&lst, ft_lstcharnew('X', flags)))
-			return (ft_lstcharclear(&lst));
-		if (ft_strchr("xp", c)
-			&& !ft_lstcharadd_front(&lst, ft_lstcharnew('x', flags)))
-			return (ft_lstcharclear(&lst));
-		if (!ft_lstcharadd_front(&lst, ft_lstcharnew('0', flags)))
-			return (ft_lstcharclear(&lst));
-	}
-	if (flags->negative && !ft_lstcharadd_front(&lst, ft_lstcharnew('-', flags)))
+		lst = add_prefix(lst, flags);
+	if (flags->negative
+		&& !ft_lstcharadd_front(&lst, ft_lstcharnew('-', flags)))
 		return (ft_lstcharclear(&lst));
 	if (flags->plus && ft_strchr("di", c) && !flags->negative)
 		if (!ft_lstcharadd_front(&lst, ft_lstcharnew('+', flags)))
 			return (ft_lstcharclear(&lst));
 	if (!flags->plus && flags->space
-		&& ft_strchr("di", c) && lst->content != '-')
+		&& ft_strchr("di", c) && !flags->negative)
 		if (!ft_lstcharadd_front(&lst, ft_lstcharnew(' ', flags)))
 			return (ft_lstcharclear(&lst));
 	if (!flags->zero)
@@ -127,10 +100,9 @@ static void	read_flags(char *str, t_flags *flags)
 	flags->conversion = *str;
 }
 
-static int	handle(va_list args, t_flags *flags)
+static int	handle_type(va_list args, t_flags *flags)
 {
 	t_listchar	*output;
-	void		*ptr;
 
 	if (flags->conversion == '%')
 		output = ft_lstcharnew('%', flags);
@@ -139,16 +111,7 @@ static int	handle(va_list args, t_flags *flags)
 	if (flags->conversion == 's')
 		output = string(va_arg(args, char *), flags);
 	if (flags->conversion == 'p')
-	{
-		ptr = va_arg(args, void *);
-		if (!ptr)
-		{
-			flags->conversion = 's';
-			output = string("0x0", flags);
-		}
-		if (ptr)
-			output = pointer((unsigned long)ptr, flags);
-	}
+		output = pointer((unsigned long)va_arg(args, void *), flags);
 	if (ft_strchr("di", flags->conversion))
 		output = integer((long long)va_arg(args, int), flags);
 	if (ft_strchr("xXu", flags->conversion))
@@ -157,8 +120,6 @@ static int	handle(va_list args, t_flags *flags)
 		output = use_flags(output, flags);
 	if (!flags->error)
 		ft_lstchariter(output, print_content, flags);
-	if (!flags->error)
-		flags->count += ft_lstcharsize(output);
 	ft_lstcharclear(&output);
 	return (flags->count);
 }
@@ -174,15 +135,12 @@ int	ft_printf(const char *str, ...)
 	while (*str && !flags.error)
 	{
 		while (*str != '%' && *str && !flags.error)
-		{
 			print_content((unsigned char *)str++, &flags);
-			flags.count++;
-		}
 		if (*str && !flags.error)
 		{
 			reset_flags(&flags);
 			read_flags((char *)++str, &flags);
-			handle(args, &flags);
+			handle_type(args, &flags);
 			while (!ft_strchr("cspdiuxX%", *str))
 				str++;
 			str++;

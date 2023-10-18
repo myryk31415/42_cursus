@@ -6,15 +6,15 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/14 17:03:17 by padam             #+#    #+#             */
-/*   Updated: 2023/10/17 23:34:58 by padam            ###   ########.fr       */
+/*   Updated: 2023/10/18 18:26:23 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "limits.h"
 
-#define TEXT "%#5X, %#5X, %#5X, %#5X, %#5X, %#5X, %#5X, %#5X, %#5X, %#5X\n", 0, 5, -1, -10, 0x1234,-1862, 0xABCDE, INT_MIN, INT_MAX, UINT_MAX
-// #define TEXT "\001\002\007\v\010\f\r\n"
+#define TEXT "(% .d)\n", 0
+// #define TEXT "%p\n", NULL
 
 int	main()
 {

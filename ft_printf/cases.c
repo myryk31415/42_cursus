@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 16:24:35 by padam             #+#    #+#             */
-/*   Updated: 2023/10/17 23:44:08 by padam            ###   ########.fr       */
+/*   Updated: 2023/10/18 17:47:06 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,11 @@ t_listchar	*pointer(unsigned long i, t_flags *flags)
 {
 	t_listchar	*lst;
 
+	if (!i && flags->precision < 0)
+	{
+		flags->conversion = 's';
+		return (string("0x0", flags));
+	}
 	lst = NULL;
 	i += -2 * i * (i < 0);
 	while (i)

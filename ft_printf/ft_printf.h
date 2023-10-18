@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 14:43:22 by padam             #+#    #+#             */
-/*   Updated: 2023/10/17 23:59:41 by padam            ###   ########.fr       */
+/*   Updated: 2023/10/18 18:23:42 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,13 @@ typedef struct s_listchar
 
 int			ft_printf(const char *str, ...);
 
+//helper
+void		reset_flags(t_flags *flags);
+void		ft_toupperchar(unsigned char *c, t_flags *flags);
+void		print_content(unsigned char *c, t_flags *flags);
+char		*skip_number(char *str);
+t_listchar	*add_prefix(t_listchar *lst, t_flags *flags);
+
 //cases
 t_listchar	*character(int c, t_flags *flags);
 t_listchar	*string(char *str, t_flags *flags);
@@ -46,8 +53,6 @@ t_listchar	*integer(long long integer, t_flags *flags);
 t_listchar	*pointer(unsigned long i, t_flags *flags);
 
 //lst_functions
-void		ft_toupperchar(unsigned char *c, t_flags *flags);
-void		print_content(unsigned char *c, t_flags *flags);
 t_listchar	*ft_lstcharnew(unsigned char c, t_flags *flags);
 int			ft_lstcharsize(t_listchar *lst);
 void		*ft_lstcharadd_back(t_listchar **lst, t_listchar *new);

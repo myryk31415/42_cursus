@@ -6,12 +6,12 @@
 #    By: padam <padam@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/09 15:34:56 by padam             #+#    #+#              #
-#    Updated: 2023/10/17 23:55:44 by padam            ###   ########.fr        #
+#    Updated: 2023/10/18 17:33:07 by padam            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libftprintf.a
-SRCS = ft_printf.c cases.c lst_functions.c lst_functions_two.c
+SRCS = ft_printf.c cases.c lst_functions.c lst_functions_two.c helper.c
 OBJS = $(SRCS:.c=.o)
 CFLAGS = -Wall -Wextra -Werror -I.includes -Ilibft
 LIBFT_DIR = libft

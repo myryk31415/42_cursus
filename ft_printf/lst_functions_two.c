@@ -6,24 +6,11 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 23:50:21 by padam             #+#    #+#             */
-/*   Updated: 2023/10/17 23:53:09 by padam            ###   ########.fr       */
+/*   Updated: 2023/10/18 17:28:08 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-
-void	ft_toupperchar(unsigned char *c, t_flags *flags)
-{
-	flags->error += 0;
-	if (*c >= 97 && *c <= 122)
-		*c -= 32;
-}
-
-void	print_content(unsigned char *c, t_flags *flags)
-{
-	if (write(1, c, 1) == -1)
-		flags->error = 1;
-}
 
 void	ft_lstchariter(t_listchar *lst, void (*f)(unsigned char*,
 			t_flags *flags), t_flags *flags)
