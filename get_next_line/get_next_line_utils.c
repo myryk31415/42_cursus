@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 15:51:51 by padam             #+#    #+#             */
-/*   Updated: 2023/10/19 18:18:30 by padam            ###   ########.fr       */
+/*   Updated: 2023/10/27 13:24:58 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,25 +41,36 @@ size_t	ft_strlen(const char *s)
 	int	i;
 
 	i = 0;
-	while (*s)
-	{
-		s++;
+	while (*s++)
 		i++;
-	}
 	return (i);
 }
 
-char	*ft_strchr(const char *s, int c)
+void	*ft_memchr(const void *s, int c, size_t n)
 {
-	while (*s)
+	while (n--)
 	{
-		if (*s == (char)c)
-			return ((char *)s);
+		if (*(unsigned char *)s == (unsigned char)c)
+			return ((void *)s);
 		s++;
 	}
-	if (*s == (char)c)
-		return ((char *)s);
 	return (NULL);
+}
+
+void	*ft_memcpy(void *dst, const void *src, size_t n)
+{
+	void	*ptr;
+
+	ptr = dst;
+	if (!dst && !src)
+		return (dst);
+	while (n--)
+	{
+		*(unsigned char *)dst = *(unsigned char *)src;
+		src++;
+		dst++;
+	}
+	return (ptr);
 }
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
@@ -81,19 +92,6 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 	return (l);
 }
 
-size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
-{
-	size_t	l;
-
-	l = ft_strlen(dst);
-	if (l < dstsize)
-	{
-		ft_strlcpy((dst + l), src, dstsize - l);
-		return (l + ft_strlen(src));
-	}
-	return (ft_strlen(src) + dstsize);
-}
-
 char	*ft_strdup(const char *src)
 {
 	char	*ptr;
@@ -110,18 +108,4 @@ char	*ft_strdup(const char *src)
 	}
 	ptr[i] = '\0';
 	return (ptr);
-}
-
-char	*ft_strjoin(char const *s1, char const *s2)
-{
-	int		l;
-	char	*joint;
-
-	l = ft_strlen(s1) + ft_strlen(s2) + 1;
-	joint = malloc(l * sizeof(char));
-	if (!joint)
-		return (NULL);
-	ft_strlcpy(joint, s1, l);
-	ft_strlcat(joint, s2, l);
-	return (joint);
 }

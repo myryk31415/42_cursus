@@ -6,24 +6,30 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 15:48:26 by padam             #+#    #+#             */
-/*   Updated: 2023/10/19 18:20:46 by padam            ###   ########.fr       */
+/*   Updated: 2023/10/27 13:25:08 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-#include <unistd.h>
-#include <stdlib.h>
+# include <unistd.h>
+# include <stdlib.h>
+
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 32
+# endif
 
 char	*get_next_line(int fd);
 
 //utils
+void	ft_bzero(void *s, size_t n);
+void	*ft_calloc(size_t count, size_t size);
 size_t	ft_strlen(const char *s);
-char	*ft_strchr(const char *s, int c);
+void	*ft_memchr(const void *s, int c, size_t n);
+void	*ft_memcpy(void *dst, const void *src, size_t n);
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
-size_t	ft_strcat(char *dst, const char *src);
-char	*ft_strdup(const char *s1);
-char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strdup(const char *src);
 
 #endif
