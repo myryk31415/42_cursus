@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 18:25:18 by padam             #+#    #+#             */
-/*   Updated: 2023/10/27 17:28:55 by padam            ###   ########.fr       */
+/*   Updated: 2023/10/28 12:58:27 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,19 +26,23 @@ int	get_char_count(char *str, int len)
 	return (len);
 }
 
-void	fill_stat_buf(char *stat, char *buf, int len)
+int	fill_stat_buf(char **stat, char *buf, int len)
 {
-	free(stat);
+	free(*stat);
+	*stat = NULL;
 	if (len)
 	{
-		stat = malloc(len + 1);
-		stat[len] = '\0';
-		ft_memcpy(stat, buf, len);
+		*stat = malloc(len + 1);
+		if (!*stat)
+			return (0);
+		stat[0][len] = '\0';
+		ft_memcpy(*stat, buf, len);
 	}
+	return (1);
 }
 
 // recursivly read from fd and store in buf
-char	*recursive(char *line, int fd, int i, char *stat)
+char	*recursive(char *line, int fd, int i, char **stat)
 {
 	char	buf_temp[BUFFER_SIZE];
 	int		total_offset;
@@ -46,8 +50,8 @@ char	*recursive(char *line, int fd, int i, char *stat)
 	int		cpy_count;
 
 	total_offset = BUFFER_SIZE * i;
-	if (stat)
-		total_offset += ft_strlen(stat);
+	if (*stat)
+		total_offset += ft_strlen(*stat);
 	read_return = read(fd, &buf_temp, BUFFER_SIZE);
 	if (read_return == -1)
 		return (NULL);
@@ -58,7 +62,8 @@ char	*recursive(char *line, int fd, int i, char *stat)
 	{
 		if (ft_memchr(buf_temp, '\n', read_return))
 			cpy_count = get_char_count(buf_temp, read_return);
-		fill_stat_buf(stat, buf_temp + cpy_count, read_return - cpy_count);
+		if (!fill_stat_buf(stat, buf_temp + cpy_count, read_return - cpy_count))
+			return (NULL);
 		if (total_offset + cpy_count == 0)
 			return (NULL);
 		line = malloc(total_offset + cpy_count + 2);
@@ -78,10 +83,9 @@ char	*get_next_line(int fd)
 	int					cpy_count;
 
 	cpy_count = 0;
-	stat[fd] = NULL;
 	line = NULL;
 	*temp = '\0';
-	if (!fd || BUFFER_SIZE < 1)
+	if (BUFFER_SIZE < 1)
 		return (NULL);
 	if (stat[fd])
 	{
@@ -94,11 +98,12 @@ char	*get_next_line(int fd)
 				return (NULL);
 			line[cpy_count] = '\0';
 			ft_memcpy(line, temp, cpy_count);
-			fill_stat_buf(stat[fd], temp + cpy_count, ft_strlen(temp) - cpy_count);
+			if (!fill_stat_buf(&stat[fd], temp + cpy_count, ft_strlen(temp) - cpy_count))
+				return (NULL);
 			return (line);
 		}
 	}
-	line = recursive(line, fd, 0, stat[fd]);
+	line = recursive(line, fd, 0, &stat[fd]);
 	ft_memcpy(line, temp, ft_strlen(temp));
 	return (line);
 }
