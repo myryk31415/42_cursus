@@ -1,18 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_prtf.h                                          :+:      :+:    :+:   */
+/*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/13 14:43:22 by padam             #+#    #+#             */
-/*   Updated: 2023/10/24 16:14:38 by padam            ###   ########.fr       */
+/*   Created: 2023/10/07 17:42:45 by padam             #+#    #+#             */
+/*   Updated: 2023/10/19 13:35:51 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRTF_H
-# define FT_PRTF_H
+#include "libft.h"
 
-int			ft_printf(const char *str, ...);
+void	*ft_memcpy(void *dst, const void *src, size_t n)
+{
+	void	*ptr;
 
-#endif
+	ptr = dst;
+	if (!dst && !src)
+		return (dst);
+	while (n--)
+	{
+		*(unsigned char *)dst = *(unsigned char *)src;
+		src++;
+		dst++;
+	}
+	return (ptr);
+}

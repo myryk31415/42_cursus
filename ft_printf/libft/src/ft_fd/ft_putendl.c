@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_prtf.h                                          :+:      :+:    :+:   */
+/*   ft_putendl.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/13 14:43:22 by padam             #+#    #+#             */
-/*   Updated: 2023/10/24 16:14:38 by padam            ###   ########.fr       */
+/*   Created: 2023/10/08 17:25:49 by padam             #+#    #+#             */
+/*   Updated: 2023/10/18 22:15:44 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRTF_H
-# define FT_PRTF_H
+#include "libft.h"
 
-int			ft_printf(const char *str, ...);
-
-#endif
+void	ft_putendl(char *s)
+{
+	ft_putstr(s);
+	ft_putchar('\n');
+}

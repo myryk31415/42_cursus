@@ -1,18 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_prtf.h                                          :+:      :+:    :+:   */
+/*   ft_char.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/13 14:43:22 by padam             #+#    #+#             */
-/*   Updated: 2023/10/24 16:14:38 by padam            ###   ########.fr       */
+/*   Created: 2023/10/18 22:53:38 by padam             #+#    #+#             */
+/*   Updated: 2023/10/18 22:58:01 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRTF_H
-# define FT_PRTF_H
+#ifndef FT_CHAR_H
+# define FT_CHAR_H
 
-int			ft_printf(const char *str, ...);
+int				ft_isalnum(int c);
+int				ft_isalpha(int c);
+int				ft_isascii(int c);
+int				ft_isdigit(int c);
+int				ft_isprint(int c);
+int				ft_tolower(int c);
+int				ft_toupper(int c);
 
 #endif

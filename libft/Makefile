@@ -6,7 +6,7 @@
 #    By: padam <padam@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/09 15:34:56 by padam             #+#    #+#              #
-#    Updated: 2023/10/19 15:32:18 by padam            ###   ########.fr        #
+#    Updated: 2023/10/24 16:14:07 by padam            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,7 @@ SRCS_NB =	ft_abs.c			ft_atoi.c			ft_itoa.c
 
 SRCS_PRTF =	cases.c				ft_printf.c			helper.c			\
 			lst_fncts_two.c		lst_fncts.c
+
 SRCS_STR =	ft_split.c			ft_strchr.c			ft_strdup.c			\
 			ft_striteri.c		ft_strjoin.c		ft_strlcat.c		\
 			ft_strlcpy.c		ft_strlen.c			ft_strmapi.c		\

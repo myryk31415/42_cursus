@@ -1,18 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_prtf.h                                          :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/13 14:43:22 by padam             #+#    #+#             */
-/*   Updated: 2023/10/24 16:14:38 by padam            ###   ########.fr       */
+/*   Created: 2023/10/08 16:46:48 by padam             #+#    #+#             */
+/*   Updated: 2023/10/19 13:36:28 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRTF_H
-# define FT_PRTF_H
+#include "libft.h"
 
-int			ft_printf(const char *str, ...);
+void	*ft_calloc(size_t count, size_t size)
+{
+	void	*ptr;
 
-#endif
+	ptr = malloc(count * size);
+	if (ptr)
+		ft_bzero(ptr, count * size);
+	return (ptr);
+}

@@ -1,18 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_prtf.h                                          :+:      :+:    :+:   */
+/*   ft_lstclear.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/13 14:43:22 by padam             #+#    #+#             */
-/*   Updated: 2023/10/24 16:14:38 by padam            ###   ########.fr       */
+/*   Created: 2023/10/11 14:43:37 by padam             #+#    #+#             */
+/*   Updated: 2023/10/18 23:18:26 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRTF_H
-# define FT_PRTF_H
+#include "libft.h"
 
-int			ft_printf(const char *str, ...);
-
-#endif
+void	ft_lstclear(t_list **lst, void (*del)(void*))
+{
+	if (*lst)
+	{
+		if ((*lst)->next)
+			ft_lstclear(&((*lst)->next), *del);
+		(*del)((*lst)->content);
+		free(*lst);
+	}
+	*lst = NULL;
+}
