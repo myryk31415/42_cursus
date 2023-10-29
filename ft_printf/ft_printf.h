@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 14:43:22 by padam             #+#    #+#             */
-/*   Updated: 2023/10/18 18:23:42 by padam            ###   ########.fr       */
+/*   Updated: 2023/10/24 15:56:25 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define FT_PRINTF_H
 
 # include <stdio.h>
-# include "libft/libft.h"
+# include "libft/includes/libft.h"
 
 typedef struct s_flags
 {

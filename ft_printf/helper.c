@@ -6,11 +6,12 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 17:27:33 by padam             #+#    #+#             */
-/*   Updated: 2023/10/18 18:25:36 by padam            ###   ########.fr       */
+/*   Updated: 2023/10/24 15:57:11 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+#include "unistd.h"
 
 void	reset_flags(t_flags *flags)
 {

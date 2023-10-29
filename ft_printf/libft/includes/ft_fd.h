@@ -1,18 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_prtf.h                                          :+:      :+:    :+:   */
+/*   ft_fd.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/13 14:43:22 by padam             #+#    #+#             */
-/*   Updated: 2023/10/24 16:14:38 by padam            ###   ########.fr       */
+/*   Created: 2023/10/18 22:54:40 by padam             #+#    #+#             */
+/*   Updated: 2023/10/18 22:57:29 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRTF_H
-# define FT_PRTF_H
+#ifndef FT_FD_H
+# define FT_FD_H
 
-int			ft_printf(const char *str, ...);
+void	ft_putchar_fd(char c, int fd);
+void	ft_putchar(char c);
+void	ft_putendl_fd(char *s, int fd);
+void	ft_putendl(char *s);
+void	ft_putnbr_fd(int n, int fd);
+void	ft_putnbr(int n);
+void	ft_putstr_fd(char *s, int fd);
+void	ft_putstr(char *s);
 
 #endif
