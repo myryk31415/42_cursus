@@ -6,7 +6,7 @@
 #    By: padam <padam@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/09 15:34:56 by padam             #+#    #+#              #
-#    Updated: 2023/10/19 18:09:48 by padam            ###   ########.fr        #
+#    Updated: 2023/11/04 12:28:39 by padam            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ LIBFT_DIR = libft
 all: $(NAME)
 
 $(NAME): $(LIBFT_DIR)/libft.a $(OBJS)
+	cp	$(LIBFT_DIR)/libft.a $(NAME)
 	ar -rcs $(NAME) $(OBJS) $(LIBFT_DIR)/libft.a
 
 $(LIBFT_DIR)/libft.a:

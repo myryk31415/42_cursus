@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 15:38:33 by padam             #+#    #+#             */
-/*   Updated: 2023/10/24 15:59:22 by padam            ###   ########.fr       */
+/*   Updated: 2023/11/04 14:42:48 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include "ft_lst.h"
 # include "ft_mem.h"
 # include "ft_nb.h"
+# include "ft_prtf.h"
 # include "ft_str.h"
 
 #endif
