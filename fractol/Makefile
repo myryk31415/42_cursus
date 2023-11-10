@@ -6,12 +6,12 @@
 #    By: padam <padam@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/09 15:34:56 by padam             #+#    #+#              #
-#    Updated: 2023/11/09 20:15:44 by padam            ###   ########.fr        #
+#    Updated: 2023/11/10 12:20:30 by padam            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = fract\'ol
-SRCS = main.c
+SRCS = main.c utils.c mandelbrot.c
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 LIBMLX_DIR = ./MLX42

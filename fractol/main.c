@@ -6,62 +6,79 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 18:48:05 by padam             #+#    #+#             */
-/*   Updated: 2023/11/09 21:16:30 by padam            ###   ########.fr       */
+/*   Updated: 2023/11/10 16:44:54 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-int	update_image(mlx_image_t *img, t_flags *flags)
+int	update_image(t_flags *flags)
 {
-	int		x;
-	int		y;
-	double	x1;
-	double	y1;
-	int		i;
+	int			x;
+	int			y;
+	double		x1;
+	double		y1;
+	int			i;
+	u_int32_t	color[3] = {RED, GREEN, BLUE};
 
-	x = 0;
-	while (x < img->width)
+	y = 0;
+	while (y < (int)(flags->img->height))
 	{
-		y = 0;
-		while (y < img->height)
+		x = 0;
+		while (x < (int)(flags->img->width))
 		{
-			x1 = (x - flags->width / 2) / flags->zoom + flags->x;
-			y1 = (y - flags->height / 2) / flags->zoom + flags->y;
+			x1 = (x - (int)(flags->img->width) / 2) / flags->zoom + flags->x;
+			y1 = (y - (int)(flags->img->height) / 2) / flags->zoom + flags->y;
 			i = mandelbrot_iterations(x1, y1, flags);
-			if (i == flags->max_iter)
-				img->pixels[y * img->width + x] = 0;
+			if (i >= flags->max_iter)
+				set_color(y * flags->img->width + x, BLACK, 0, flags);
 			else
-				img->pixels[y * img->width + x] = 0xFFFFFF / flags->max_iter * i;
-			y++;
+				set_color(y * flags->img->width + x, color[i % 3], 0, flags);
+			x++;
 		}
-		x++;
+		y++;
 	}
 	return (0);
-
 }
 
-void	hook(void *param)
+void	my_scrollhook(double xdelta, double ydelta, void *flags_in)
 {
+	t_flags	*flags;
+
+	flags = flags_in;
+	if (ydelta + xdelta != 0)
+		flags->zoom -= (ydelta + xdelta) * flags->zoom;
+}
+
+void	hook(void *flags_in)
+{
+	t_flags	*flags;
 	mlx_t	*mlx;
 
-	mlx = param;
-	if (mlx_is_key_down(param, MLX_KEY_ESCAPE))
-		mlx_close_window(param);
-	// if (mlx_is_key_down(param, MLX_KEY_UP))
-	// 	g_img->instances[0].y -= 5;
-	// if (mlx_is_key_down(param, MLX_KEY_DOWN))
-	// 	g_img->instances[0].y += 5;
-	// if (mlx_is_key_down(param, MLX_KEY_LEFT))
-	// 	g_img->instances[0].x -= 5;
-	// if (mlx_is_key_down(param, MLX_KEY_RIGHT))
-	// 	g_img->instances[0].x += 5;
+	flags = flags_in;
+	mlx = flags->mlx;
+	if (flags->img->height != (const uint32_t)mlx->height
+		|| flags->img->width != (const uint32_t)mlx->width)
+	{
+		mlx_delete_image(mlx, flags->img);
+		flags->img = mlx_new_image(mlx, mlx->width, mlx->height);
+		mlx_image_to_window(mlx, flags->img, 0, 0);
+	}
+	update_image(flags);
+	if (mlx_is_key_down(mlx, MLX_KEY_ESCAPE))
+		mlx_close_window(mlx);
+	if (mlx_is_key_down(mlx, MLX_KEY_UP))
+		flags->y -= 100 / flags->zoom;
+	if (mlx_is_key_down(mlx, MLX_KEY_DOWN))
+		flags->y += 100 / flags->zoom;
+	if (mlx_is_key_down(mlx, MLX_KEY_LEFT))
+		flags->x -= 100 / flags->zoom;
+	if (mlx_is_key_down(mlx, MLX_KEY_RIGHT))
+		flags->x += 100 / flags->zoom;
 }
 
 int	main(int argc, char **argv)
 {
-	mlx_t		*mlx;
-	mlx_image_t	*img;
 	t_flags		flags;
 
 	if (argc == 7)
@@ -72,15 +89,16 @@ int	main(int argc, char **argv)
 	// 	return (0);
 	// }
 
-	mlx = mlx_init(WIDTH, HEIGHT, "fract\'ol", false);
-	// if (!mlx)
-	// 	ft_error();
-	img = mlx_new_image(mlx, WIDTH, HEIGHT);
-	ft_memset(img->pixels, 255, img->width * img->height * sizeof(int32_t));
-	mlx_image_to_window(mlx, img, 0, 0);
-	// mlx_scroll_hook(mlx, &my_scrollhook, NULL);
-	mlx_loop_hook(mlx, hook, mlx);
-	mlx_loop(mlx);
-	mlx_terminate(mlx);
+	initialize_flags(&flags);
+	flags.mlx = mlx_init(WIDTH, HEIGHT, "fract\'ol", true);
+	if (!flags.mlx)
+		return (0);
+	flags.img = mlx_new_image(flags.mlx, WIDTH, HEIGHT);
+	mlx_image_to_window(flags.mlx, flags.img, 0, 0);
+	update_image(&flags);
+	mlx_scroll_hook(flags.mlx, &my_scrollhook, &flags);
+	mlx_loop_hook(flags.mlx, hook, &flags);
+	mlx_loop(flags.mlx);
+	mlx_terminate(flags.mlx);
 	return (0);
 }
