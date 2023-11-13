@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 21:01:32 by padam             #+#    #+#             */
-/*   Updated: 2023/11/10 16:29:22 by padam            ###   ########.fr       */
+/*   Updated: 2023/11/13 22:17:05 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,28 @@ void	set_color(int pixel, u_int32_t color, u_int8_t dimm, t_flags *flags)
 	flags->img->pixels[pixel + 3] = 0xFF;
 }
 
-void	initialize_flags(t_flags *flags)
+int	initialize_flags(t_flags *flags)
 {
+	flags->mlx = mlx_init(WIDTH, HEIGHT, "fract\'ol", true);
+	if (!flags->mlx)
+		return (0);
+	flags->pixelcount_i = ft_calloc(MAX_ITER, sizeof(int));
+	new_image(flags);
+	flags->julia_x = 0;
+	flags->julia_y = 0;
 	// flags->height = HEIGHT;
 	// flags->width = WIDTH;
 	flags->x = 0;
 	flags->y = 0;
 	flags->zoom = 400;
-	flags->max_iter = 500;
-	flags->treshold = 2;
+	flags->zoom_old = 400;
+	flags->max_iter = MAX_ITER;
+	flags->treshold = 4;
+	flags->fractal = 'j';
+	flags->update = 1;
+	if (!flags->pixelcount_i)
+		stop_program("Error: malloc failed\n", flags);
+	return (1);
 }
 
 void	put_parameters(void)
@@ -53,4 +66,59 @@ void	put_parameters(void)
 	ft_putstr_fd("  - Perpendicular Burning Julia\n", 2);
 	ft_putstr_fd("  - Perpendicular Celtic\n", 2);
 	ft_putstr_fd("  - Perpendicular Celtic Mandelbar\n", 2);
+}
+
+void	stop_program(char *message, t_flags *flags)
+{
+	ft_putstr_fd(message, 2);
+	mlx_close_window(flags->mlx);
+}
+
+void	reset_flags_arrays(t_flags *flags)
+{
+	uint32_t	i;
+	uint32_t	j;
+
+	i = 0;
+ 	while (i < flags->img->height)
+	{
+		j = 0;
+		while (j < flags->img->width)
+			flags->iterationcount[i][j++] = 0;
+		i++;
+	}
+	i = 0;
+	while ((int)i < flags->max_iter)
+		flags->pixelcount_i[i++] = 0;
+}
+
+void	new_image(t_flags *flags)
+{
+	int32_t		i;
+	mlx_t		*mlx;
+
+	mlx = flags->mlx;
+	if (flags->img)
+		mlx_delete_image(mlx, flags->img);
+	if (flags->iterationcount)
+	{
+		i = 0;
+		while ((u_int32_t)i < flags->img->height)
+			free(flags->iterationcount[i++]);
+		free(flags->iterationcount);
+	}
+	flags->img = mlx_new_image(mlx, mlx->width, mlx->height);
+	mlx_image_to_window(mlx, flags->img, 0, 0);
+	i = 0;
+	flags->iterationcount = ft_calloc(mlx->height, sizeof(int *));
+	if (!flags->iterationcount)
+		stop_program("Error: malloc failed\n", flags);
+	while (i < mlx->height)
+	{
+		flags->iterationcount[i] = ft_calloc(mlx->width, sizeof(int));
+		if (!flags->iterationcount[i])
+			stop_program("Error: malloc failed\n", flags);
+		i++;
+	}
+	update_image(flags);
 }
