@@ -6,12 +6,12 @@
 #    By: padam <padam@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/09 15:34:56 by padam             #+#    #+#              #
-#    Updated: 2023/11/13 17:45:16 by padam            ###   ########.fr        #
+#    Updated: 2023/11/15 19:09:40 by padam            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = fract\'ol
-SRCS = main.c utils.c fractols.c hooks.c
+NAME = fractol
+SRCS = main.c utils.c fractals.c hooks.c
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 LIBMLX_DIR = ./MLX42
@@ -33,7 +33,6 @@ clean:
 
 fclean: clean
 	rm -f $(NAME)
-	make -C $(LIBFT_DIR) fclean
 
 re: fclean all
 

@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 21:01:32 by padam             #+#    #+#             */
-/*   Updated: 2023/11/13 22:17:05 by padam            ###   ########.fr       */
+/*   Updated: 2023/11/16 00:19:44 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,12 @@ int	initialize_flags(t_flags *flags)
 	flags->mlx = mlx_init(WIDTH, HEIGHT, "fract\'ol", true);
 	if (!flags->mlx)
 		return (0);
-	flags->pixelcount_i = ft_calloc(MAX_ITER, sizeof(int));
+	flags->pixelcount_i = ft_calloc(MAX_ITER + 1, sizeof(int));
+	if (!flags->pixelcount_i)
+	{
+		stop_program("Error: malloc failed\n", flags);
+		return (0);
+	}
 	new_image(flags);
 	flags->julia_x = 0;
 	flags->julia_y = 0;
@@ -39,39 +44,42 @@ int	initialize_flags(t_flags *flags)
 	flags->zoom_old = 400;
 	flags->max_iter = MAX_ITER;
 	flags->treshold = 4;
-	flags->fractal = 'j';
 	flags->update = 1;
-	if (!flags->pixelcount_i)
-		stop_program("Error: malloc failed\n", flags);
+	flags->error = 0;
 	return (1);
 }
 
 void	put_parameters(void)
 {
-	ft_putstr_fd("Usage: ./fractol \"fractal\"\n", 2);
-	ft_putstr_fd("Available fractals:\n", 2);
-	ft_putstr_fd("  - Mandelbrot\n", 2);
-	ft_putstr_fd("  - Julia\n", 2);
-	ft_putstr_fd("  - Burning Ship\n", 2);
-	ft_putstr_fd("  - Tricorn\n", 2);
-	ft_putstr_fd("  - Buffalo\n", 2);
-	ft_putstr_fd("  - Mandelbar\n", 2);
-	ft_putstr_fd("  - Celtic Mandelbrot\n", 2);
-	ft_putstr_fd("  - Celtic Mandelbar\n", 2);
-	ft_putstr_fd("  - Celtic Perpendicular\n", 2);
-	ft_putstr_fd("  - Perpendicular Mandelbrot\n", 2);
-	ft_putstr_fd("  - Perpendicular Burning Ship\n", 2);
-	ft_putstr_fd("  - Perpendicular Buffalo\n", 2);
-	ft_putstr_fd("  - Perpendicular Tricorn\n", 2);
-	ft_putstr_fd("  - Perpendicular Burning Julia\n", 2);
-	ft_putstr_fd("  - Perpendicular Celtic\n", 2);
-	ft_putstr_fd("  - Perpendicular Celtic Mandelbar\n", 2);
+	ft_putstr_fd("Usage: ./fractol \"fractal\" \"julia_x\" \"julia_y\" \n", 2);
+	ft_putstr_fd("Available fractals: m - mandelbrot, j - julia, b - burning ship\n", 2);
+	ft_putstr_fd("Available julia parameters:\n", 2);
+	ft_putstr_fd("julia_x - real part of the complex number\n", 2);
+	ft_putstr_fd("julia_y - imaginary part of the complex number\n", 2);
+	ft_putstr_fd("Both numbers will be divided by 100\n", 2);
 }
 
-void	stop_program(char *message, t_flags *flags)
+void	*stop_program(char *message, t_flags *flags)
 {
+	int	i;
+
 	ft_putstr_fd(message, 2);
+	flags->error = 1;
+	if (flags->iterationcount)
+	{
+		i = 0;
+		while ((u_int32_t)i < flags->img->height)
+			free(flags->iterationcount[i++]);
+		free(flags->iterationcount);
+		flags->iterationcount = NULL;
+	}
+	if (flags->pixelcount_i)
+	{
+		free(flags->pixelcount_i);
+		flags->pixelcount_i = NULL;
+	}
 	mlx_close_window(flags->mlx);
+	return (NULL);
 }
 
 void	reset_flags_arrays(t_flags *flags)
@@ -80,7 +88,7 @@ void	reset_flags_arrays(t_flags *flags)
 	uint32_t	j;
 
 	i = 0;
- 	while (i < flags->img->height)
+	while (i < flags->img->height)
 	{
 		j = 0;
 		while (j < flags->img->width)
@@ -112,12 +120,22 @@ void	new_image(t_flags *flags)
 	i = 0;
 	flags->iterationcount = ft_calloc(mlx->height, sizeof(int *));
 	if (!flags->iterationcount)
+	{
 		stop_program("Error: malloc failed\n", flags);
+		return ;
+	}
 	while (i < mlx->height)
 	{
 		flags->iterationcount[i] = ft_calloc(mlx->width, sizeof(int));
 		if (!flags->iterationcount[i])
+		{
+			while (--i)
+				free(flags->iterationcount[i]);
+			free(flags->iterationcount);
+			flags->iterationcount = NULL;
 			stop_program("Error: malloc failed\n", flags);
+			return ;
+		}
 		i++;
 	}
 	update_image(flags);

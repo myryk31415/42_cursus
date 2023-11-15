@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 18:30:10 by padam             #+#    #+#             */
-/*   Updated: 2023/11/13 20:40:52 by padam            ###   ########.fr       */
+/*   Updated: 2023/11/15 21:02:41 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 # define WIDTH 1800
 # define HEIGHT 1000
-# define MAX_ITER 10
+# define MAX_ITER 100
 
 # define RED 0xFF0000
 # define GREEN 0x00FF00
@@ -35,6 +35,7 @@ typedef struct s_flags
 	mlx_image_t	*img;
 	char		fractal;
 	int			update;
+	int			error;
 	double		julia_x;
 	double		julia_y;
 	// int			height;
@@ -60,7 +61,7 @@ void	set_color(int pixel, u_int32_t color, u_int8_t dimm, t_flags *flags);
 int		initialize_flags(t_flags *flags);
 void	put_parameters(void);
 void	reset_flags_arrays(t_flags *flags);
-void	stop_program(char *message, t_flags *flags);
+void	*stop_program(char *message, t_flags *flags);
 void	new_image(t_flags *flags);
 
 //hooks

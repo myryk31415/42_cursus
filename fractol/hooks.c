@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 19:13:00 by padam             #+#    #+#             */
-/*   Updated: 2023/11/13 21:45:43 by padam            ###   ########.fr       */
+/*   Updated: 2023/11/15 20:38:31 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void	my_scrollhook(double xdelta, double ydelta, void *flags_in)
 	flags = flags_in;
 	if (ydelta + xdelta < 0 && ++flags->update)
 		flags->zoom *= 1 - (ydelta + xdelta) / 10;
-	if (ydelta + xdelta > 0 && ++flags->update) //flags->zoom > (ydelta + xdelta) * flags->zoom && ++flags->update)
-		flags->zoom /= 1 + (ydelta + xdelta) / 10; //-= (ydelta + xdelta) * flags->zoom;
+	if (ydelta + xdelta > 0 && ++flags->update)
+		flags->zoom /= 1 + (ydelta + xdelta) / 10;
 }
 
 void	hook(void *flags_in)
@@ -38,7 +38,10 @@ void	hook(void *flags_in)
 		|| flags->img->width != (const uint32_t)mlx->width)
 		new_image(flags);
 	if (mlx_is_key_down(mlx, MLX_KEY_ESCAPE))
+	{
 		stop_program("Program stopped by user\n", flags);
+		return ;
+	}
 	flags->update++;
 	if (mlx_is_key_down(mlx, MLX_KEY_H))
 	{
@@ -71,7 +74,7 @@ void	hook(void *flags_in)
 	if (flags->max_iter != flags->max_iter_old)
 	{
 		free(flags->pixelcount_i);
-		flags->pixelcount_i = malloc(sizeof(int) * flags->max_iter);
+		flags->pixelcount_i = ft_calloc(flags->max_iter + 1, sizeof(int));
 	}
 	if (flags->update)
 	{
