@@ -6,7 +6,7 @@
 #    By: padam <padam@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/09 15:34:56 by padam             #+#    #+#              #
-#    Updated: 2023/10/19 18:10:31 by padam            ###   ########.fr        #
+#    Updated: 2023/11/09 18:41:30 by padam            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,3 +32,5 @@ fclean: clean
 re: fclean all
 
 bonus: all
+
+.PHONY: all, clean, fclean, re, bonus

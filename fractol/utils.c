@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 21:01:32 by padam             #+#    #+#             */
-/*   Updated: 2023/11/16 00:19:44 by padam            ###   ########.fr       */
+/*   Updated: 2023/11/17 15:34:44 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,11 @@ int	initialize_flags(t_flags *flags)
 		return (0);
 	}
 	new_image(flags);
-	flags->julia_x = 0;
-	flags->julia_y = 0;
 	// flags->height = HEIGHT;
 	// flags->width = WIDTH;
 	flags->x = 0;
 	flags->y = 0;
 	flags->zoom = 400;
-	flags->zoom_old = 400;
 	flags->max_iter = MAX_ITER;
 	flags->treshold = 4;
 	flags->update = 1;
@@ -51,12 +48,25 @@ int	initialize_flags(t_flags *flags)
 
 void	put_parameters(void)
 {
+	ft_putstr_fd("----------------------------------------\n", 2);
 	ft_putstr_fd("Usage: ./fractol \"fractal\" \"julia_x\" \"julia_y\" \n", 2);
 	ft_putstr_fd("Available fractals: m - mandelbrot, j - julia, b - burning ship\n", 2);
 	ft_putstr_fd("Available julia parameters:\n", 2);
 	ft_putstr_fd("julia_x - real part of the complex number\n", 2);
 	ft_putstr_fd("julia_y - imaginary part of the complex number\n", 2);
 	ft_putstr_fd("Both numbers will be divided by 100\n", 2);
+	ft_putstr_fd("Example: ./fractol j 10 -30\n", 2);
+	ft_putstr_fd("----------------------------------------\n", 2);
+	ft_putstr_fd("Controls:\n", 2);
+	ft_putstr_fd("Zoom - scroll wheel\n", 2);
+	ft_putstr_fd("Move - arrow keys\n", 2);
+	ft_putstr_fd("Change julia parameters - ASDW\n", 2);
+	// ft_putstr_fd("Change fractal - F\n", 2);
+	// ft_putstr_fd("Change color - C\n", 2);
+	ft_putstr_fd("Reset - H\n", 2);
+	ft_putstr_fd("In/Decrease max iterations - I/O\n", 2);
+	ft_putstr_fd("Exit - ESC\n", 2);
+	ft_putstr_fd("----------------------------------------\n", 2);
 }
 
 void	*stop_program(char *message, t_flags *flags)
@@ -85,16 +95,16 @@ void	*stop_program(char *message, t_flags *flags)
 void	reset_flags_arrays(t_flags *flags)
 {
 	uint32_t	i;
-	uint32_t	j;
+	// uint32_t	j;
 
-	i = 0;
-	while (i < flags->img->height)
-	{
-		j = 0;
-		while (j < flags->img->width)
-			flags->iterationcount[i][j++] = 0;
-		i++;
-	}
+	// i = 0;
+	// while (i < flags->img->height)
+	// {
+	// 	j = 0;
+	// 	while (j < flags->img->width)
+	// 		flags->iterationcount[i][j++] = 0;
+	// 	i++;
+	// }
 	i = 0;
 	while ((int)i < flags->max_iter)
 		flags->pixelcount_i[i++] = 0;
@@ -116,12 +126,17 @@ void	new_image(t_flags *flags)
 		free(flags->iterationcount);
 	}
 	flags->img = mlx_new_image(mlx, mlx->width, mlx->height);
+	if (!flags->img)
+	{
+		stop_program("Error: mlx_new_image failed\n", flags);
+		return ;
+	}
 	mlx_image_to_window(mlx, flags->img, 0, 0);
 	i = 0;
 	flags->iterationcount = ft_calloc(mlx->height, sizeof(int *));
 	if (!flags->iterationcount)
 	{
-		stop_program("Error: malloc failed\n", flags);
+		stop_program("Error: malloc for iterationcount failed\n", flags);
 		return ;
 	}
 	while (i < mlx->height)
@@ -133,7 +148,7 @@ void	new_image(t_flags *flags)
 				free(flags->iterationcount[i]);
 			free(flags->iterationcount);
 			flags->iterationcount = NULL;
-			stop_program("Error: malloc failed\n", flags);
+			stop_program("Error: malloc for iterationcount failed\n", flags);
 			return ;
 		}
 		i++;

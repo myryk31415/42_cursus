@@ -6,83 +6,37 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:17:41 by padam             #+#    #+#             */
-/*   Updated: 2023/10/28 15:07:53 by padam            ###   ########.fr       */
+/*   Updated: 2023/11/03 16:47:33 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	count_letters(const char *s, int c)
-{
-	int	i;
-
-	i = 0;
-	while (*s && *s != c)
-	{
-		s++;
-		i++;
-	}
-	return (i);
-}
-
-static int	count_words(const char *s, int c)
-{
-	int	i;
-
-	i = 0;
-	while (*s)
-	{
-		while (*s == c)
-			s++;
-		if (*s)
-		{
-			i++;
-			while (*s && *s != c)
-				s++;
-		}
-	}
-	return (i);
-}
-
-static void	*clean(char **arr, int l)
-{
-	int	i;
-
-	i = 0;
-	while (i < l)
-	{
-		free(arr[i]);
-		i++;
-	}
-	free(arr);
-	return (NULL);
-}
-
 char	**ft_split(char const *s, char c)
 {
-	int		wordcount;
-	int		lettercount;
-	char	**split_words;
-	int		i;
+	static int	iteration = 0;
+	int			lettercount;
+	char		**split_words;
 
-	i = 0;
-	wordcount = count_words(s, c);
-	split_words = malloc((wordcount + 1) * sizeof(char *));
-	if (!split_words)
-		return (NULL);
-	split_words[wordcount] = NULL;
-	while (i < wordcount && split_words)
+	lettercount = 0;
+	while (*s == c && *s)
+		s++;
+	while (s[lettercount] != c && s[lettercount])
+		lettercount++;
+	if (lettercount > 0 && ++iteration)
 	{
-		while (*s == c)
-			s++;
-		lettercount = count_letters(s, c);
-		split_words[i] = malloc((lettercount + 1) * sizeof(char));
-		if (split_words[i])
-			ft_strlcpy(split_words[i], s, lettercount + 1);
-		else
-			return (clean(split_words, i));
-		s += lettercount;
-		i++;
+		split_words = ft_split(s + lettercount, c);
+		if (iteration-- && !split_words)
+			return (NULL);
+		split_words[iteration] = ft_substr(s, 0, lettercount);
+		lettercount = 1;
+		if (!split_words[iteration])
+			while (split_words[iteration + lettercount])
+				free(split_words[iteration + lettercount++]);
+		if (!split_words[iteration])
+			return (free(split_words), NULL);
 	}
+	else
+		split_words = ft_calloc((iteration + 1), sizeof(char *));
 	return (split_words);
 }

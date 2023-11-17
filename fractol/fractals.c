@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 20:37:08 by padam             #+#    #+#             */
-/*   Updated: 2023/11/15 23:44:31 by padam            ###   ########.fr       */
+/*   Updated: 2023/11/17 15:36:35 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,8 +159,8 @@ int	get_iteration(int x, int y, t_flags *flags)
 	int			i;
 
 	i = 0;
-	if (flags->iterationcount[y][x] != 0)
-		return (flags->iterationcount[y][x]);
+	// if (flags->iterationcount[y][x] != 0)
+	// 	return (flags->iterationcount[y][x]);
 	x1 = (x - (int)(flags->img->width) / 2) / flags->zoom + flags->x;
 	y1 = (y - (int)(flags->img->height) / 2) / flags->zoom + flags->y;
 	// if (flags->iterationcount[y][x] == MAX_ITER)

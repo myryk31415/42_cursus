@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 18:30:10 by padam             #+#    #+#             */
-/*   Updated: 2023/11/15 21:02:41 by padam            ###   ########.fr       */
+/*   Updated: 2023/11/17 16:37:28 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 # define WIDTH 1800
 # define HEIGHT 1000
-# define MAX_ITER 100
+# define MAX_ITER 1000
 
 # define RED 0xFF0000
 # define GREEN 0x00FF00
@@ -41,13 +41,12 @@ typedef struct s_flags
 	// int			height;
 	// int			width;
 	double		x;
-	double		x_old;
+	double		x_diff;
 	double		y;
-	double		y_old;
+	double		y_diff;
 	double		zoom;
-	double		zoom_old;
 	int			max_iter;
-	int			max_iter_old;
+	int			max_iter_change;
 	int			treshold;
 	int			**iterationcount;
 	int			*pixelcount_i;
