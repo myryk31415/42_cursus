@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hooks.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
+/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 19:13:00 by padam             #+#    #+#             */
-/*   Updated: 2023/11/17 16:26:25 by padam            ###   ########.fr       */
+/*   Updated: 2023/11/23 14:25:03 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,55 @@ void	my_scrollhook(double xdelta, double ydelta, void *flags_in)
 		flags->zoom *= 1 - (ydelta + xdelta) / 10;
 	if (ydelta + xdelta > 0 && ++flags->update)
 		flags->zoom /= 1 + (ydelta + xdelta) / 10;
-	// if (mlx_is_key_down(flags->mlx, MLX_KEY_Q))
-	// 	flags->zoom *= 1.2;
-	// if (mlx_is_key_down(flags->mlx, MLX_KEY_E))
-	// 	flags->zoom /= 1.2;
 	flags->x = x1 - (x - (int)(flags->img->width) / 2) / flags->zoom;
 	flags->y = y1 - (y - (int)(flags->img->height) / 2) / flags->zoom;
+}
+
+static void	keybinds_two(mlx_t *mlx, t_flags *flags)
+{
+	flags->update++;
+	if (mlx_is_key_down(mlx, MLX_KEY_H))
+	{
+		flags->zoom = 400;
+		flags->x = 0;
+		flags->y = 0;
+	}
+	else if (mlx_is_key_down(mlx, MLX_KEY_C))
+		flags->color = flags->color * 0x100 % 0xFFFFFF;
+	else if (mlx_is_key_down(mlx, MLX_KEY_O))
+	{
+		flags->max_iter++;
+		free(flags->pixelcount_i);
+		flags->pixelcount_i = ft_calloc(flags->max_iter + 1, sizeof(int));
+	}
+	else if (mlx_is_key_down(mlx, MLX_KEY_I) && flags->max_iter)
+	{
+		flags->max_iter--;
+		free(flags->pixelcount_i);
+		flags->pixelcount_i = ft_calloc(flags->max_iter + 1, sizeof(int));
+	}
+	else
+		flags->update--;
+}
+
+static void	keybinds_one(mlx_t *mlx, t_flags *flags)
+{
+	if (mlx_is_key_down(mlx, MLX_KEY_UP) && ++flags->update)
+		flags->julia_y -= 10 / flags->zoom;
+	if (mlx_is_key_down(mlx, MLX_KEY_DOWN) && ++flags->update)
+		flags->julia_y += 10 / flags->zoom;
+	if (mlx_is_key_down(mlx, MLX_KEY_LEFT) && ++flags->update)
+		flags->julia_x -= 10 / flags->zoom;
+	if (mlx_is_key_down(mlx, MLX_KEY_RIGHT) && ++flags->update)
+		flags->julia_x += 10 / flags->zoom;
+	if (mlx_is_key_down(mlx, MLX_KEY_W))
+		flags->y_diff -= 100;
+	else if (mlx_is_key_down(mlx, MLX_KEY_S))
+		flags->y_diff += 100;
+	else if (mlx_is_key_down(mlx, MLX_KEY_A))
+		flags->x_diff -= 100;
+	else if (mlx_is_key_down(mlx, MLX_KEY_D))
+		flags->x_diff += 100;
 }
 
 void	hook(void *flags_in)
@@ -53,49 +96,8 @@ void	hook(void *flags_in)
 		stop_program("Program stopped by user\n", flags);
 		return ;
 	}
-	if (mlx_is_key_down(mlx, MLX_KEY_UP) && ++flags->update)
-		flags->julia_y -= 10 / flags->zoom;
-	if (mlx_is_key_down(mlx, MLX_KEY_DOWN) && ++flags->update)
-		flags->julia_y += 10 / flags->zoom;
-	if (mlx_is_key_down(mlx, MLX_KEY_LEFT) && ++flags->update)
-		flags->julia_x -= 10 / flags->zoom;
-	if (mlx_is_key_down(mlx, MLX_KEY_RIGHT) && ++flags->update)
-		flags->julia_x += 10 / flags->zoom;
-	if (mlx_is_key_down(mlx, MLX_KEY_W))
-		flags->y_diff -= 100;
-	else if (mlx_is_key_down(mlx, MLX_KEY_S))
-		flags->y_diff += 100;
-	else if (mlx_is_key_down(mlx, MLX_KEY_A))
-		flags->x_diff -= 100;
-	else if (mlx_is_key_down(mlx, MLX_KEY_D))
-		flags->x_diff += 100;
-	flags->update++;
-	if (mlx_is_key_down(mlx, MLX_KEY_H))
-	{
-		flags->zoom = 400;
-		flags->x = 0;
-		flags->y = 0;
-	}
-	else if (mlx_is_key_down(mlx, MLX_KEY_O))
-	{
-		flags->max_iter++;
-		flags->max_iter_change = 1;
-	}
-	else if (mlx_is_key_down(mlx, MLX_KEY_I) && flags->max_iter)
-	{
-		flags->max_iter--;
-		flags->max_iter_change = 1;
-	}
-	else
-		flags->update--;
-	flags->x += flags->x_diff / flags->zoom;
-	flags->y += flags->y_diff / flags->zoom;
-	if (flags->max_iter_change)
-	{
-		flags->max_iter_change = 0;
-		free(flags->pixelcount_i);
-		flags->pixelcount_i = ft_calloc(flags->max_iter + 1, sizeof(int));
-	}
+	keybinds_one(mlx, flags);
+	keybinds_two(mlx, flags);
 	if (flags->update || flags->x_diff || flags->y_diff)
 	{
 		update_image(flags);

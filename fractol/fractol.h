@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fractol.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
+/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 18:30:10 by padam             #+#    #+#             */
-/*   Updated: 2023/11/17 16:37:28 by padam            ###   ########.fr       */
+/*   Updated: 2023/11/23 14:24:39 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 # define WIDTH 1800
 # define HEIGHT 1000
-# define MAX_ITER 1000
+# define MAX_ITER 10
 
 # define RED 0xFF0000
 # define GREEN 0x00FF00
@@ -38,15 +38,13 @@ typedef struct s_flags
 	int			error;
 	double		julia_x;
 	double		julia_y;
-	// int			height;
-	// int			width;
 	double		x;
 	double		x_diff;
 	double		y;
 	double		y_diff;
 	double		zoom;
+	int			color;
 	int			max_iter;
-	int			max_iter_change;
 	int			treshold;
 	int			**iterationcount;
 	int			*pixelcount_i;
@@ -56,19 +54,20 @@ typedef struct s_flags
 void	update_image(t_flags *flags);
 
 //utils
-void	set_color(int pixel, u_int32_t color, u_int8_t dimm, t_flags *flags);
+int		get_color(double hue, t_flags *flags);
+void	set_color(int pixel, u_int32_t color, t_flags *flags);
 int		initialize_flags(t_flags *flags);
-void	put_parameters(void);
-void	reset_flags_arrays(t_flags *flags);
 void	*stop_program(char *message, t_flags *flags);
 void	new_image(t_flags *flags);
+
+void	put_parameters(void);
+int		check_parameters(int argc, char **argv, t_flags *flags);
 
 //hooks
 void	hook(void *param);
 void	my_scrollhook(double xdelta, double ydelta, void *param);
 
 //fractals
-int		mandelbrot_iterations(double x, double y, t_flags *flags);
 int		get_iteration(int x, int y, t_flags *flags);
 
 #endif

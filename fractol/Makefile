@@ -3,15 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: padam <padam@student.42.fr>                +#+  +:+       +#+         #
+#    By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/09 15:34:56 by padam             #+#    #+#              #
-#    Updated: 2023/11/15 19:09:40 by padam            ###   ########.fr        #
+#    Updated: 2023/11/23 14:07:24 by padam            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = fractol
-SRCS = main.c utils.c fractals.c hooks.c
+SRCS = main.c utils.c utils2.c fractals.c hooks.c
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 LIBMLX_DIR = ./MLX42

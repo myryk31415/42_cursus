@@ -3,22 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
+/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 21:01:32 by padam             #+#    #+#             */
-/*   Updated: 2023/11/17 15:34:44 by padam            ###   ########.fr       */
+/*   Updated: 2023/11/23 14:25:41 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-//rgb
-void	set_color(int pixel, u_int32_t color, u_int8_t dimm, t_flags *flags)
+int	get_color(double hue, t_flags *flags)
+{
+	int	i;
+
+	i = hue * hue * hue * hue * 255;
+	i *= flags->color;
+	return (i);
+}
+
+void	set_color(int pixel, u_int32_t color, t_flags *flags)
 {
 	pixel *= 4;
-	flags->img->pixels[pixel] = ((color >> 16) - dimm);
-	flags->img->pixels[pixel + 1] = ((color >> 8) - dimm) & 0xFF;
-	flags->img->pixels[pixel + 2] = (color - dimm) & 0xFF;
+	flags->img->pixels[pixel] = color >> 16 & 0xFF;
+	flags->img->pixels[pixel + 1] = color >> 8 & 0xFF;
+	flags->img->pixels[pixel + 2] = color & 0xFF;
 	flags->img->pixels[pixel + 3] = 0xFF;
 }
 
@@ -34,39 +42,15 @@ int	initialize_flags(t_flags *flags)
 		return (0);
 	}
 	new_image(flags);
-	// flags->height = HEIGHT;
-	// flags->width = WIDTH;
 	flags->x = 0;
 	flags->y = 0;
 	flags->zoom = 400;
+	flags->color = 1;
 	flags->max_iter = MAX_ITER;
 	flags->treshold = 4;
 	flags->update = 1;
 	flags->error = 0;
 	return (1);
-}
-
-void	put_parameters(void)
-{
-	ft_putstr_fd("----------------------------------------\n", 2);
-	ft_putstr_fd("Usage: ./fractol \"fractal\" \"julia_x\" \"julia_y\" \n", 2);
-	ft_putstr_fd("Available fractals: m - mandelbrot, j - julia, b - burning ship\n", 2);
-	ft_putstr_fd("Available julia parameters:\n", 2);
-	ft_putstr_fd("julia_x - real part of the complex number\n", 2);
-	ft_putstr_fd("julia_y - imaginary part of the complex number\n", 2);
-	ft_putstr_fd("Both numbers will be divided by 100\n", 2);
-	ft_putstr_fd("Example: ./fractol j 10 -30\n", 2);
-	ft_putstr_fd("----------------------------------------\n", 2);
-	ft_putstr_fd("Controls:\n", 2);
-	ft_putstr_fd("Zoom - scroll wheel\n", 2);
-	ft_putstr_fd("Move - arrow keys\n", 2);
-	ft_putstr_fd("Change julia parameters - ASDW\n", 2);
-	// ft_putstr_fd("Change fractal - F\n", 2);
-	// ft_putstr_fd("Change color - C\n", 2);
-	ft_putstr_fd("Reset - H\n", 2);
-	ft_putstr_fd("In/Decrease max iterations - I/O\n", 2);
-	ft_putstr_fd("Exit - ESC\n", 2);
-	ft_putstr_fd("----------------------------------------\n", 2);
 }
 
 void	*stop_program(char *message, t_flags *flags)
@@ -90,24 +74,6 @@ void	*stop_program(char *message, t_flags *flags)
 	}
 	mlx_close_window(flags->mlx);
 	return (NULL);
-}
-
-void	reset_flags_arrays(t_flags *flags)
-{
-	uint32_t	i;
-	// uint32_t	j;
-
-	// i = 0;
-	// while (i < flags->img->height)
-	// {
-	// 	j = 0;
-	// 	while (j < flags->img->width)
-	// 		flags->iterationcount[i][j++] = 0;
-	// 	i++;
-	// }
-	i = 0;
-	while ((int)i < flags->max_iter)
-		flags->pixelcount_i[i++] = 0;
 }
 
 void	new_image(t_flags *flags)
