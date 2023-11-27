@@ -6,13 +6,13 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 20:37:08 by padam             #+#    #+#             */
-/*   Updated: 2023/11/23 14:35:13 by padam            ###   ########.fr       */
+/*   Updated: 2023/11/23 16:47:59 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-int	burningship_iterations(double x0, double y0, t_flags *flags)
+static int	burningship_iterations(double x0, double y0, t_flags *flags)
 {
 	int		i;
 	int		j;
@@ -31,8 +31,7 @@ int	burningship_iterations(double x0, double y0, t_flags *flags)
 			x_old = coords[0];
 			y_old = coords[1];
 		}
-		coords[1] = (coords[0] + coords[0]) * coords[1];
-		coords[1] = coords[1] * (1 - 2 * (coords[1] < 0)) + y0;
+		coords[1] = ft_abs_double((coords[0] + coords[0]) * coords[1]) + y0;
 		coords[0] = coords[2] - coords[3] + x0;
 		if (coords[0] == x_old && coords[1] == y_old)
 			return (flags->max_iter);
@@ -42,7 +41,7 @@ int	burningship_iterations(double x0, double y0, t_flags *flags)
 	return (i);
 }
 
-int	mandelbrot_iterations(double x0, double y0, t_flags *flags)
+static int	mandelbrot_iterations(double x0, double y0, t_flags *flags)
 {
 	int		i;
 	int		j;
@@ -71,7 +70,7 @@ int	mandelbrot_iterations(double x0, double y0, t_flags *flags)
 	return (i);
 }
 
-int	julia_iterations(double x_old, double y_old, t_flags *flags)
+static int	julia_iterations(double x_old, double y_old, t_flags *flags)
 {
 	int		i;
 	int		j;

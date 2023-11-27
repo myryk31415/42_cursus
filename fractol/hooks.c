@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 19:13:00 by padam             #+#    #+#             */
-/*   Updated: 2023/11/23 14:25:03 by padam            ###   ########.fr       */
+/*   Updated: 2023/11/24 18:48:30 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,21 +61,21 @@ static void	keybinds_two(mlx_t *mlx, t_flags *flags)
 
 static void	keybinds_one(mlx_t *mlx, t_flags *flags)
 {
-	if (mlx_is_key_down(mlx, MLX_KEY_UP) && ++flags->update)
-		flags->julia_y -= 10 / flags->zoom;
-	if (mlx_is_key_down(mlx, MLX_KEY_DOWN) && ++flags->update)
+	if (mlx_is_key_down(mlx, MLX_KEY_W) && ++flags->update)
 		flags->julia_y += 10 / flags->zoom;
-	if (mlx_is_key_down(mlx, MLX_KEY_LEFT) && ++flags->update)
+	if (mlx_is_key_down(mlx, MLX_KEY_A) && ++flags->update)
 		flags->julia_x -= 10 / flags->zoom;
-	if (mlx_is_key_down(mlx, MLX_KEY_RIGHT) && ++flags->update)
+	if (mlx_is_key_down(mlx, MLX_KEY_S) && ++flags->update)
+		flags->julia_y -= 10 / flags->zoom;
+	if (mlx_is_key_down(mlx, MLX_KEY_D) && ++flags->update)
 		flags->julia_x += 10 / flags->zoom;
-	if (mlx_is_key_down(mlx, MLX_KEY_W))
+	if (mlx_is_key_down(mlx, MLX_KEY_UP))
 		flags->y_diff -= 100;
-	else if (mlx_is_key_down(mlx, MLX_KEY_S))
+	else if (mlx_is_key_down(mlx, MLX_KEY_DOWN))
 		flags->y_diff += 100;
-	else if (mlx_is_key_down(mlx, MLX_KEY_A))
+	else if (mlx_is_key_down(mlx, MLX_KEY_LEFT))
 		flags->x_diff -= 100;
-	else if (mlx_is_key_down(mlx, MLX_KEY_D))
+	else if (mlx_is_key_down(mlx, MLX_KEY_RIGHT))
 		flags->x_diff += 100;
 }
 
@@ -98,6 +98,8 @@ void	hook(void *flags_in)
 	}
 	keybinds_one(mlx, flags);
 	keybinds_two(mlx, flags);
+	flags->x += flags->x_diff / flags->zoom;
+	flags->y += flags->y_diff / flags->zoom;
 	if (flags->update || flags->x_diff || flags->y_diff)
 	{
 		update_image(flags);

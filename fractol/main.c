@@ -6,54 +6,50 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 18:48:05 by padam             #+#    #+#             */
-/*   Updated: 2023/11/23 15:33:14 by padam            ###   ########.fr       */
+/*   Updated: 2023/11/24 18:18:50 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
 
-void	fill_iterationcount(t_flags *flags)
+static void	fill_iterationcount(t_flags *flags)
 {
 	int	x;
 	int	y;
 	int	i;
-	int	xd;
-	int	yd;
 
-	xd = flags->x_diff;
-	yd = flags->y_diff;
-	y = (flags->img->height - 1) * (yd > 0) - yd;
+	y = (flags->img->height - 1) * (flags->y_diff > 0) - flags->y_diff;
 	while (y < (int)(flags->img->height) && y >= 0)
 	{
-		x = (flags->img->width - 1) * (xd > 0) - xd;
+		x = (flags->img->width - 1) * (flags->x_diff > 0) - flags->x_diff;
 		while (x < (int)(flags->img->width) && x >= 0)
 		{
 			i = get_iteration(x, y, flags);
 			flags->pixelcount_i[i]++;
-			if (xd < 0)
+			if (flags->x_diff < 0)
 				x--;
 			else
 				x++;
 		}
-		if (yd < 0)
+		if (flags->y_diff < 0)
 			y--;
 		else
 			y++;
 	}
 }
 
-void	color_image(t_flags *flags)
+static void	color_image(t_flags *flags)
 {
 	int		x;
 	int		y;
 	int		i;
 	double	hue;
 
-	y = 0;
-	while (y < (int)(flags->img->height))
+	y = -1;
+	while (++y < (int)(flags->img->height))
 	{
-		x = 0;
-		while (x < (int)(flags->img->width))
+		x = -1;
+		while (++x < (int)(flags->img->width))
 		{
 			i = flags->iterationcount[y][x];
 			if (i == flags->max_iter)
@@ -64,15 +60,14 @@ void	color_image(t_flags *flags)
 				while (i >= 0)
 					hue += flags->pixelcount_i[i--];
 				hue /= flags->total;
-				set_color(y * flags->img->width + x, get_color(hue, flags), flags);
+				set_color(y * flags->img->width + x,
+					get_color(hue, flags), flags);
 			}
-			x++;
 		}
-		y++;
 	}
 }
 
-void	copy_iterationcount(t_flags *flags)
+static void	copy_iterationcount(t_flags *flags)
 {
 	int	x;
 	int	y;
@@ -106,11 +101,14 @@ void	update_image(t_flags *flags)
 	int	i;
 
 	i = 0;
-	flags->x += flags->x_diff / flags->zoom;
-	flags->y += flags->y_diff / flags->zoom;
 	while ((int)i < flags->max_iter)
 		flags->pixelcount_i[i++] = 0;
-	if (!flags->update && (flags->x_diff || flags->y_diff))
+	if (flags->update)
+	{
+		flags->x_diff = 0;
+		flags->y_diff = 0;
+	}
+	else if (flags->x_diff || flags->y_diff)
 		copy_iterationcount(flags);
 	fill_iterationcount(flags);
 	i = 0;

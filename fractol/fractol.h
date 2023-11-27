@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 18:30:10 by padam             #+#    #+#             */
-/*   Updated: 2023/11/23 14:24:39 by padam            ###   ########.fr       */
+/*   Updated: 2023/11/24 17:52:59 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 
 # define WIDTH 1800
 # define HEIGHT 1000
-# define MAX_ITER 10
 
 # define RED 0xFF0000
 # define GREEN 0x00FF00
