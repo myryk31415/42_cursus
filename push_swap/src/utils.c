@@ -6,11 +6,61 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 16:12:10 by padam             #+#    #+#             */
-/*   Updated: 2023/11/24 16:26:46 by padam            ###   ########.fr       */
+/*   Updated: 2023/11/29 20:04:16 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+// void	test_operations(t_flags	*t_flags)
+// {
+// 	push_b(t_flags);
+// 	push_b(t_flags);
+// 	push_b(t_flags);
+// 	swap_a(t_flags);
+// 	swap_b(t_flags);
+// 	swap_both(t_flags);
+// 	push_a(t_flags);
+// 	push_b(t_flags);
+// 	rotate_a(t_flags);
+// 	rotate_b(t_flags);
+// 	rotate_both(t_flags);
+// 	reverse_rotate_a(t_flags);
+// 	reverse_rotate_b(t_flags);
+// 	reverse_rotate_both(t_flags);
+// }
+
+// void	print_stacks(t_flags *flags)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	ft_printf("Stack A: ");
+// 	while (i < flags->size_a)
+// 		ft_printf("%d ", flags->stack_a[i++]);
+// 	ft_printf("\n");
+// 	i = 0;
+// 	ft_printf("Stack B: ");
+// 	while (i < flags->size_b)
+// 		ft_printf("%d ", flags->stack_b[i++]);
+// 	ft_printf("\n");
+// }
+
+int	is_sorted(t_flags *flags)
+{
+	int	i;
+
+	i = 0;
+	if (flags->size_b)
+		return (0);
+	while (i < flags->size_a - 1)
+	{
+		if (flags->stack_a[i] > flags->stack_a[i + 1])
+			return (0);
+		i++;
+	}
+	return (1);
+}
 
 void	stop_program(char *message, t_flags *flags)
 {
@@ -22,6 +72,8 @@ void	stop_program(char *message, t_flags *flags)
 		free(flags->stack_a);
 	if (flags->stack_b)
 		free(flags->stack_b);
+	system("leaks push_swap");
+	exit(1);
 }
 
 static void	print_error(void)
@@ -63,6 +115,10 @@ int	fill_stack(t_flags *flags, int argc, char **argv)
 	if (!flags->stack_a || !flags->stack_b)
 		return (0);
 	while (--argc)
-		flags->stack_a[i++] = ft_atoi(argv[argc]);
+	{
+		flags->stack_a[i] = ft_atoi(argv[i + 1]);
+		i++;
+	}
+	flags->size_a = i;
 	return (1);
 }
