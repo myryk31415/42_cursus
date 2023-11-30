@@ -6,39 +6,11 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 15:37:02 by padam             #+#    #+#             */
-/*   Updated: 2023/11/29 22:03:21 by padam            ###   ########.fr       */
+/*   Updated: 2023/11/30 18:27:00 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-
-static void	make_group_b(t_flags *flags)
-{
-	int	count;
-
-	count = 0;
-	while (count < flags->group_size)
-	{
-
-	}
-	flags->element_count += flags->group_size;
-}
-
-static void	start_sort(t_flags *flags)
-{
-	while (flags->element_count <= flags->elements_total - 6)
-	{
-		make_group_a(flags);
-		make_group_b(flags);
-	}
-	if (flags->element_count <= flags->elements_total - 3)
-	{
-		make_group_a(flags);
-		if (flags->stack_a[0] > flags->stack_a[1] && flags->element_count < flags->elements_total - 2)
-			swap_a(flags);
-
-	}
-}
 
 void	merge_to_a(t_flags *flags)
 {
@@ -102,7 +74,7 @@ void	merge_to_b(t_flags *flags)
 	}
 }
 
-void	move_to_b(t_flags *flags)
+static void	move_to_b(t_flags *flags)
 {
 	while (flags->element_count < flags->elements_total)
 	{
@@ -112,7 +84,7 @@ void	move_to_b(t_flags *flags)
 	}
 }
 
-void	move_a(t_flags *flags)
+static void	move_a(t_flags *flags)
 {
 	while (flags->element_count < flags->elements_total)
 	{
@@ -160,15 +132,22 @@ int	main(int argc, char **argv)
 
 	flags.group_size = 3;
 	flags.elements_total = argc - 1;
+	flags.element_count = 0;
 	if (argc == 1)
 		return (0);
 	if (!check_args(argc, argv))
 		stop_program("Incorrect arguments", &flags);
 	if (!fill_stack(&flags, argc, argv))
 		stop_program("Malloc failed", &flags);
-	start_sort(&flags);
+	start_sort_three(&flags);
 	while (flags.group_size < flags.elements_total)
 		merge_groups(&flags);
 	// system("leaks push_swap");
 	return (0);
 }
+
+5
+4
+3
+2
+1

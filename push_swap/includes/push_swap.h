@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 15:16:46 by padam             #+#    #+#             */
-/*   Updated: 2023/11/29 13:19:04 by padam            ###   ########.fr       */
+/*   Updated: 2023/11/30 18:20:53 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,16 @@ typedef struct s_flags
 }t_flags;
 
 //test
-void	test_operations(t_flags	*t_flags);
-void	print_stacks(t_flags *flags);
+// void	test_operations(t_flags	*t_flags);
+// void	print_stacks(t_flags *flags);
 
 //utils
 void	stop_program(char *message, t_flags *flags);
 int		check_args(int argc, char **argv);
 int		fill_stack(t_flags *flags, int argc, char **argv);
+
+//start_sort
+void	start_sort_three(t_flags *flags);
 
 //operations
 void	swap_a(t_flags *flags);
