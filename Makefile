@@ -6,7 +6,7 @@
 #    By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/27 14:19:40 by padam             #+#    #+#              #
-#    Updated: 2023/11/27 14:30:29 by padam            ###   ########.fr        #
+#    Updated: 2023/11/27 14:53:25 by padam            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,3 +17,5 @@ clean:
 	for PROJECT in $(PROJECTS); do \
 		make fclean -C $$PROJECT; \
 	done
+
+.PHONY: clean

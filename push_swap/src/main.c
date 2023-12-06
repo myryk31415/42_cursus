@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 15:37:02 by padam             #+#    #+#             */
-/*   Updated: 2023/11/30 18:27:00 by padam            ###   ########.fr       */
+/*   Updated: 2023/12/06 15:30:29 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,15 +139,14 @@ int	main(int argc, char **argv)
 		stop_program("Incorrect arguments", &flags);
 	if (!fill_stack(&flags, argc, argv))
 		stop_program("Malloc failed", &flags);
+	if (argc == 6)
+	{
+		sort_five(&flags);
+		return (0);
+	}
 	start_sort_three(&flags);
 	while (flags.group_size < flags.elements_total)
 		merge_groups(&flags);
 	// system("leaks push_swap");
 	return (0);
 }
-
-5
-4
-3
-2
-1
