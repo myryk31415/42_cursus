@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 15:37:02 by padam             #+#    #+#             */
-/*   Updated: 2023/12/06 15:30:29 by padam            ###   ########.fr       */
+/*   Updated: 2023/12/07 21:56:30 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,24 +19,24 @@ void	merge_to_a(t_flags *flags)
 
 	a_count = 0;
 	b_count = 0;
-	if (flags->elements_total - flags->element_count < flags->group_size * 2)
-		b_count = 2 * flags->group_size - (flags->elements_total - flags->element_count);
+	if (flags->size_b % flags->group_size && flags->element_count == 0)
+		b_count = flags->group_size - flags->size_b % flags->group_size;
 	while ((a_count < flags->group_size || b_count < flags->group_size)
 		&& flags->element_count < flags->elements_total)
 	{
 		if (a_count == flags->group_size && ++b_count)
 		{
+			reverse_rotate_b(flags);
 			push_a(flags);
-			rotate_a(flags);
 		}
 		else if (b_count == flags->group_size && ++a_count)
-			rotate_a(flags);
-		else if (flags->stack_a[0] < flags->stack_b[0] && ++a_count)
-			rotate_a(flags);
+			reverse_rotate_a(flags);
+		else if (flags->stack_a[flags->size_a - 1] > flags->stack_b[flags->size_b - 1] && ++a_count)
+			reverse_rotate_a(flags);
 		else
 		{
+			reverse_rotate_b(flags);
 			push_a(flags);
-			rotate_a(flags);
 			b_count++;
 		}
 		flags->element_count++;
@@ -50,78 +50,82 @@ void	merge_to_b(t_flags *flags)
 
 	a_count = 0;
 	b_count = 0;
-	if (flags->elements_total - flags->element_count < flags->group_size * 2)
-		b_count = 2 * flags->group_size - (flags->elements_total - flags->element_count);
+	if (flags->size_b % flags->group_size && flags->element_count == 0)
+		b_count = flags->group_size - flags->size_b % flags->group_size;
 	while ((a_count < flags->group_size || b_count < flags->group_size)
 		&& flags->element_count < flags->elements_total)
 	{
 		if (a_count == flags->group_size && ++b_count)
-			rotate_b(flags);
+			reverse_rotate_b(flags);
 		else if (b_count == flags->group_size && ++a_count)
 		{
+			reverse_rotate_a(flags);
 			push_b(flags);
-			rotate_b(flags);
 		}
-		else if (flags->stack_a[0] < flags->stack_b[0])
+		else if (flags->stack_a[flags->size_a - 1] > flags->stack_b[flags->size_b - 1])
 		{
+			reverse_rotate_a(flags);
 			push_b(flags);
-			rotate_b(flags);
 			a_count++;
 		}
 		else if (++b_count)
-			rotate_b(flags);
+			reverse_rotate_b(flags);
 		flags->element_count++;
 	}
 }
 
 static void	move_to_b(t_flags *flags)
 {
-	while (flags->element_count < flags->elements_total)
+	int	i;
+
+	i = flags->elements_total % (flags->group_size * 2);
+	while (i--)
 	{
+		reverse_rotate_a(flags);
 		push_b(flags);
-		rotate_b(flags);
 		flags->element_count++;
 	}
 }
 
 static void	move_a(t_flags *flags)
 {
-	while (flags->element_count < flags->elements_total)
+	int	i;
+
+	i = flags->elements_total % (flags->group_size * 2);
+	while (i--)
 	{
-		rotate_a(flags);
+		reverse_rotate_a(flags);
 		flags->element_count++;
 	}
 }
 
 static void	merge_groups(t_flags *flags)
 {
-	int	b_groups;
+	int	toggle;
 
 	// ft_printf("group_size: %d\n", flags->group_size);
-	b_groups = flags->size_b / flags->group_size;
-	if (flags->size_b % flags->group_size)
-		b_groups++;
+	toggle = 1;
 	flags->element_count = 0;
 	// ft_printf("b_groups: %d\n", b_groups);
-	while (b_groups > 0)
+	if (flags->elements_total % (flags->group_size * 4) > flags->group_size * 2
+		|| flags->elements_total % (flags->group_size * 4) == 0)
+		toggle *= -1;
+	if (flags->elements_total % (flags->group_size * 2) <= flags->group_size
+		&& flags->elements_total % (flags->group_size * 2) != 0)
 	{
-		if (b_groups)
-		{
-			merge_to_a(flags);
-			b_groups--;
-		}
-		if (!b_groups)
-		{
-			move_to_b(flags);
-			break ;
-		}
-		if (b_groups)
-		{
-			merge_to_b(flags);
-			b_groups--;
-		}
-		if (!b_groups)
+		if (toggle == 1)
 			move_a(flags);
+		else
+			move_to_b(flags);
+		toggle *= -1;
+	}
+	while (flags->element_count < flags->elements_total)
+	{
+		if (toggle == 1)
+			merge_to_a(flags);
+		else
+			merge_to_b(flags);
+		toggle *= -1;
 	}
 	flags->group_size *= 2;
 }

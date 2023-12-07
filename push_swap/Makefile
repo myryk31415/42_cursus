@@ -6,7 +6,7 @@
 #    By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/09 15:34:56 by padam             #+#    #+#              #
-#    Updated: 2023/12/06 15:31:03 by padam            ###   ########.fr        #
+#    Updated: 2023/12/07 15:19:23 by padam            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,8 @@ LIBFT_DIR = libft
 SRC_PATH = src
 OBJ_PATH = obj
 
-SRCS = main.c utils.c sort_five.c start_sort.c swap_push.c rotate.c reverse_rotate.c
+SRCS =	main.c utils.c sort_five.c start_sort.c swap_push.c \
+		rotate.c reverse_rotate.c
 OBJ_NAME = $(SRCS:.c=.o)
 OBJS = $(addprefix $(OBJ_PATH)/,$(OBJ_NAME))
 
