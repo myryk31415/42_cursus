@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 15:16:46 by padam             #+#    #+#             */
-/*   Updated: 2023/12/06 15:56:06 by padam            ###   ########.fr       */
+/*   Updated: 2023/12/08 14:26:36 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct s_flags
 	int	group_size;
 	int	elements_total;
 	int	element_count;
+	int	b_rotated;
 }t_flags;
 
 //test
