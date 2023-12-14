@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 15:16:46 by padam             #+#    #+#             */
-/*   Updated: 2023/12/08 14:26:36 by padam            ###   ########.fr       */
+/*   Updated: 2023/12/14 18:57:28 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int		fill_stack(t_flags *flags, int argc, char **argv);
 int		is_sorted(t_flags *flags);
 
 //start_sort
-void	start_sort_three(t_flags *flags);
+void	start_sort(t_flags *flags);
 void	sort_five(t_flags *flags);
 
 //operations

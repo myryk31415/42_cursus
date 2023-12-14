@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_prtf.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
+/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 14:43:22 by padam             #+#    #+#             */
-/*   Updated: 2023/10/24 16:14:38 by padam            ###   ########.fr       */
+/*   Updated: 2023/12/14 16:51:21 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_PRTF_H
 # define FT_PRTF_H
 
-int			ft_printf(const char *str, ...);
+int	ft_printf(const char *str, ...);
 
 #endif
