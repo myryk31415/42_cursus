@@ -6,7 +6,7 @@
 #    By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/09 15:34:56 by padam             #+#    #+#              #
-#    Updated: 2023/11/24 15:32:27 by padam            ###   ########.fr        #
+#    Updated: 2023/12/17 19:54:11 by padam            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,8 +37,8 @@ SRCS_MEM =	ft_bzero.c			ft_calloc.c			ft_memchr.c			\
 			ft_memcmp.c			ft_memcpy.c			ft_memmove.c		\
 			ft_memset.c
 
-SRCS_NB =	ft_abs.c			ft_atoi.c			ft_isnumber.c		\
-			ft_itoa.c
+SRCS_NB =	ft_abs.c			ft_atoi.c			ft_isint.c			\
+			ft_isnumber.c		ft_itoa.c
 
 SRCS_PRTF =	cases.c				ft_printf.c			helper.c			\
 			lst_fncts_two.c		lst_fncts.c

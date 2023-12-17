@@ -6,7 +6,7 @@
 #    By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/09 15:34:56 by padam             #+#    #+#              #
-#    Updated: 2023/12/07 15:19:23 by padam            ###   ########.fr        #
+#    Updated: 2023/12/17 19:25:58 by padam            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,8 +20,8 @@ LIBFT_DIR = libft
 SRC_PATH = src
 OBJ_PATH = obj
 
-SRCS =	main.c utils.c sort_five.c start_sort.c swap_push.c \
-		rotate.c reverse_rotate.c
+SRCS =	main.c merge_to_stack.c merge_to_stack_util.c utils.c sort_five.c \
+		start_sort.c swap_push.c rotate.c reverse_rotate.c
 OBJ_NAME = $(SRCS:.c=.o)
 OBJS = $(addprefix $(OBJ_PATH)/,$(OBJ_NAME))
 
@@ -38,7 +38,7 @@ $(OBJ_PATH)	:
 	mkdir -p $(OBJ_PATH)
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c | $(OBJ_PATH)
-	printf "%-50s\r" "$(CC) $@"
+	@printf "%-50s\r" "$(CC) $@"
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 clean:

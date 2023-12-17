@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 16:12:10 by padam             #+#    #+#             */
-/*   Updated: 2023/11/29 20:04:16 by padam            ###   ########.fr       */
+/*   Updated: 2023/12/17 19:52:24 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,20 @@
 // 	ft_printf("\n");
 // }
 
+void	push_b_half(t_flags *flags)
+{
+	int	i;
+	int	groups;
+
+	groups = flags->elements_total / flags->group_size;
+	i = groups / 2;
+	i *= flags->group_size;
+	if (groups % 2)
+		i += flags->elements_total % flags->group_size;
+	while (i--)
+		push_b(flags);
+}
+
 int	is_sorted(t_flags *flags)
 {
 	int	i;
@@ -62,52 +76,32 @@ int	is_sorted(t_flags *flags)
 	return (1);
 }
 
-void	stop_program(char *message, t_flags *flags)
+void	stop_program(t_flags *flags)
 {
-	ft_printf("----------------------------------------\n");
-	ft_printf("Program stopped - ");
-	ft_printf("%s\n", message);
-	ft_printf("----------------------------------------\n");
+	ft_printf("Error\n");
 	if (flags->stack_a)
 		free(flags->stack_a);
 	if (flags->stack_b)
 		free(flags->stack_b);
-	system("leaks push_swap");
 	exit(1);
-}
-
-static void	print_error(void)
-{
-	ft_printf("\
-----------------------------------------\n\
-Formatting error!\n\
-Please enter a list of integers.\n\
-Example: ./push_swap 12 -2 0 32 +5\n\
-----------------------------------------\n\
-");
 }
 
 int	check_args(int argc, char **argv)
 {
 	if (argc == 1)
-	{
-		print_error();
 		return (0);
-	}
 	while (--argc)
 	{
-		if (!ft_isnumber(argv[argc]))
-		{
-			print_error();
+		if (!ft_isint(argv[argc]))
 			return (0);
-		}
 	}
 	return (1);
 }
 
 int	fill_stack(t_flags *flags, int argc, char **argv)
 {
-	int	i;
+	int		i;
+	int		j;
 
 	i = 0;
 	flags->stack_a = (int *)malloc(sizeof(int) * (argc - 1));
@@ -117,6 +111,13 @@ int	fill_stack(t_flags *flags, int argc, char **argv)
 	while (--argc)
 	{
 		flags->stack_a[i] = ft_atoi(argv[i + 1]);
+		j = 0;
+		while (j < i)
+		{
+			if (flags->stack_a[j] == flags->stack_a[i])
+				return (0);
+			j++;
+		}
 		i++;
 	}
 	flags->size_a = i;

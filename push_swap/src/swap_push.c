@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 14:53:57 by padam             #+#    #+#             */
-/*   Updated: 2023/11/27 15:31:42 by padam            ###   ########.fr       */
+/*   Updated: 2023/12/17 13:57:42 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	swap_a(t_flags *flags)
 	int	tmp;
 
 	if (flags->size_a < 2)
-		stop_program("Not enough elements in stack A", flags);
+		stop_program(flags);
 	tmp = flags->stack_a[0];
 	flags->stack_a[0] = flags->stack_a[1];
 	flags->stack_a[1] = tmp;
@@ -31,7 +31,7 @@ void	swap_b(t_flags *flags)
 	int	tmp;
 
 	if (flags->size_b < 2)
-		stop_program("Not enough elements in stack B", flags);
+		stop_program(flags);
 	tmp = flags->stack_b[0];
 	flags->stack_b[0] = flags->stack_b[1];
 	flags->stack_b[1] = tmp;
@@ -44,12 +44,12 @@ void	swap_both(t_flags *flags)
 	int	tmp;
 
 	if (flags->size_b < 2)
-		stop_program("Not enough elements in stack B", flags);
+		stop_program(flags);
 	tmp = flags->stack_b[0];
 	flags->stack_b[0] = flags->stack_b[1];
 	flags->stack_b[1] = tmp;
 	if (flags->size_a < 2)
-		stop_program("Not enough elements in stack A", flags);
+		stop_program(flags);
 	tmp = flags->stack_a[0];
 	flags->stack_a[0] = flags->stack_a[1];
 	flags->stack_a[1] = tmp;
@@ -62,7 +62,7 @@ void	push_a(t_flags *flags)
 	int	i;
 
 	if (flags->size_b == 0)
-		stop_program("Stack B is empty", flags);
+		stop_program(flags);
 	i = flags->size_a;
 	while (i > 0)
 	{
@@ -87,7 +87,7 @@ void	push_b(t_flags *flags)
 	int	i;
 
 	if (flags->size_a == 0)
-		stop_program("Stack A is empty", flags);
+		stop_program(flags);
 	i = flags->size_b;
 	while (i > 0)
 	{

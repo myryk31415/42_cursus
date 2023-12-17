@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 15:16:46 by padam             #+#    #+#             */
-/*   Updated: 2023/12/14 18:57:28 by padam            ###   ########.fr       */
+/*   Updated: 2023/12/17 19:25:24 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ typedef struct s_flags
 void	merge_to_a(t_flags *flags);
 
 //utils
-void	stop_program(char *message, t_flags *flags);
+void	push_b_half(t_flags *flags);
+void	stop_program(t_flags *flags);
 int		check_args(int argc, char **argv);
 int		fill_stack(t_flags *flags, int argc, char **argv);
 int		is_sorted(t_flags *flags);
@@ -44,6 +45,11 @@ int		is_sorted(t_flags *flags);
 //start_sort
 void	start_sort(t_flags *flags);
 void	sort_five(t_flags *flags);
+
+//merge_to_stack
+void	merge_to_a(t_flags *flags);
+void	merge_to_b(t_flags *flags);
+int		push_to_a(int b_rotated, t_flags *flags);
 
 //operations
 void	swap_a(t_flags *flags);
