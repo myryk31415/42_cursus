@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 15:16:46 by padam             #+#    #+#             */
-/*   Updated: 2023/12/17 19:25:24 by padam            ###   ########.fr       */
+/*   Updated: 2023/12/18 18:37:49 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int		is_sorted(t_flags *flags);
 
 //start_sort
 void	start_sort(t_flags *flags);
-void	sort_five(t_flags *flags);
+void	sort_small(t_flags *flags);
 
 //merge_to_stack
 void	merge_to_a(t_flags *flags);

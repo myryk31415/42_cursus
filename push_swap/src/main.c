@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 15:37:02 by padam             #+#    #+#             */
-/*   Updated: 2023/12/17 19:34:27 by padam            ###   ########.fr       */
+/*   Updated: 2023/12/19 14:14:02 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,9 @@ int	main(int argc, char **argv)
 		stop_program(&flags);
 	if (is_sorted(&flags))
 		return (0);
-	if (argc == 6)
+	if (argc <= 4 || argc == 6)
 	{
-		sort_five(&flags);
+		sort_small(&flags);
 		return (0);
 	}
 	start_sort(&flags);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sort_five.c                                        :+:      :+:    :+:   */
+/*   sort_small.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 15:31:31 by padam             #+#    #+#             */
-/*   Updated: 2023/12/06 15:51:38 by padam            ###   ########.fr       */
+/*   Updated: 2023/12/18 18:39:01 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	sort_three(t_flags *flags)
 	}
 }
 
-void	sort_five(t_flags *flags)
+static void	sort_five(t_flags *flags)
 {
 	flags->group_size = 3;
 	push_b(flags);
@@ -47,4 +47,14 @@ void	sort_five(t_flags *flags)
 		swap_b(flags);
 	sort_three(flags);
 	merge_to_a(flags);
+}
+
+void	sort_small(t_flags *flags)
+{
+	if (flags->size_a == 2 && flags->stack_a[0] > flags->stack_a[1])
+		swap_a(flags);
+	else if (flags->size_a == 3)
+		sort_three(flags);
+	else if (flags->size_a == 5)
+		sort_five(flags);
 }
