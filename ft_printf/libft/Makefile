@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: padam <padam@student.42.fr>                +#+  +:+       +#+         #
+#    By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/09 15:34:56 by padam             #+#    #+#              #
-#    Updated: 2023/10/24 15:59:02 by padam            ###   ########.fr        #
+#    Updated: 2023/12/17 19:54:11 by padam            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,8 @@ CFLAGS = -Wall -Wextra -Werror -I./includes
 SRC_PATH = src
 OBJ_PATH = obj
 
-OBJ_DIRS =	ft_char	ft_fd	ft_mem	ft_nb		ft_str		ft_lst		\
+OBJ_DIRS =	ft_char	ft_fd	ft_mem	ft_nb		ft_str		ft_prtf		\
+			ft_lst
 
 SRCS_CHAR =	ft_isalnum.c		ft_isascii.c		ft_isprint.c		\
 			ft_isalpha.c		ft_isdigit.c		ft_tolower.c		\
@@ -36,19 +37,24 @@ SRCS_MEM =	ft_bzero.c			ft_calloc.c			ft_memchr.c			\
 			ft_memcmp.c			ft_memcpy.c			ft_memmove.c		\
 			ft_memset.c
 
-SRCS_NB =	ft_abs.c			ft_atoi.c			ft_itoa.c
+SRCS_NB =	ft_abs.c			ft_atoi.c			ft_isint.c			\
+			ft_isnumber.c		ft_itoa.c
+
+SRCS_PRTF =	cases.c				ft_printf.c			helper.c			\
+			lst_fncts_two.c		lst_fncts.c
 
 SRCS_STR =	ft_split.c			ft_strchr.c			ft_strdup.c			\
 			ft_striteri.c		ft_strjoin.c		ft_strlcat.c		\
 			ft_strlcpy.c		ft_strlen.c			ft_strmapi.c		\
 			ft_strncmp.c		ft_strnstr.c		ft_strrchr.c		\
-			ft_strtrim.c		ft_substr.c
+			ft_strtrim.c		ft_substr.c			get_next_line.c
 
 SRC_NAME =	$(addprefix ft_char/,	$(SRCS_CHAR))	\
 			$(addprefix ft_fd/,		$(SRCS_FD))		\
 			$(addprefix ft_lst/,	$(SRCS_LST))	\
 			$(addprefix ft_mem/,	$(SRCS_MEM))	\
 			$(addprefix ft_nb/,		$(SRCS_NB))		\
+			$(addprefix ft_prtf/,	$(SRCS_PRTF))	\
 			$(addprefix ft_str/,	$(SRCS_STR))	\
 
 OBJ_NAME = $(SRC_NAME:.c=.o)
