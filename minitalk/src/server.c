@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 10:15:29 by padam             #+#    #+#             */
-/*   Updated: 2024/01/02 22:31:06 by padam            ###   ########.fr       */
+/*   Updated: 2024/01/14 15:38:42 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
  * @brief stops the programm cleanly
  * @param message the message to print before exiting
  */
-static void stop_server(char *message)
+static void	stop_server(char *message)
 {
 	ft_printf("%s\n", message);
 	exit(0);
@@ -79,7 +79,7 @@ static void	set_signal_action(void)
  */
 int	main(void)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	ft_printf("%d\n", getpid());

@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 10:16:22 by padam             #+#    #+#             */
-/*   Updated: 2024/01/02 22:34:27 by padam            ###   ########.fr       */
+/*   Updated: 2024/01/14 15:37:37 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	stop_client(char *message)
  */
 static void	send_char(char c, pid_t pid)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < 8)
