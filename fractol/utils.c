@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 21:01:32 by padam             #+#    #+#             */
-/*   Updated: 2023/11/24 18:49:16 by padam            ###   ########.fr       */
+/*   Updated: 2024/01/14 14:44:07 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	initialize_flags(t_flags *flags)
 	flags->mlx = mlx_init(WIDTH, HEIGHT, "fract\'ol", true);
 	if (!flags->mlx)
 		return (0);
-	flags->max_iter = 1000;
+	flags->max_iter = 100;
 	flags->pixelcount_i = ft_calloc(flags->max_iter + 1, sizeof(int));
 	if (!flags->pixelcount_i)
 	{

@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 16:12:10 by padam             #+#    #+#             */
-/*   Updated: 2023/12/17 19:52:24 by padam            ###   ########.fr       */
+/*   Updated: 2024/01/14 15:08:12 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,5 +121,6 @@ int	fill_stack(t_flags *flags, int argc, char **argv)
 		i++;
 	}
 	flags->size_a = i;
+	flags->size_b = 0;
 	return (1);
 }

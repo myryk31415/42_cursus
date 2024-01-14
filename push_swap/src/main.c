@@ -6,11 +6,19 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 15:37:02 by padam             #+#    #+#             */
-/*   Updated: 2023/12/19 14:14:02 by padam            ###   ########.fr       */
+/*   Updated: 2024/01/14 15:10:38 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+static void	free_stacks(t_flags *flags)
+{
+	if (flags->stack_a)
+		free(flags->stack_a);
+	if (flags->stack_b)
+		free(flags->stack_b);
+}
 
 static void	move_to_b(t_flags *flags)
 {
@@ -82,14 +90,15 @@ int	main(int argc, char **argv)
 	if (!fill_stack(&flags, argc, argv))
 		stop_program(&flags);
 	if (is_sorted(&flags))
-		return (0);
+		return (free_stacks(&flags), 0);
 	if (argc <= 4 || argc == 6)
 	{
 		sort_small(&flags);
-		return (0);
+		return (free_stacks(&flags), 0);
 	}
 	start_sort(&flags);
 	while (flags.group_size < flags.elements_total)
 		merge_groups(&flags);
+	free_stacks(&flags);
 	return (0);
 }
