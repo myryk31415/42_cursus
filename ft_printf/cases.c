@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cases.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: padam <padam@student.42.fr>                +#+  +:+       +#+        */
+/*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 16:24:35 by padam             #+#    #+#             */
-/*   Updated: 2023/10/18 17:47:06 by padam            ###   ########.fr       */
+/*   Updated: 2024/01/02 22:37:39 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_listchar	*integer(long long i, t_flags *flags)
 		flags->hashtag = 0;
 	if (i == 0 && flags->precision < 0)
 		return (ft_lstcharnew('0', flags));
-	base = 10 + 6 * (0 < ft_strchr("xX", flags->conversion));
+	base = 10 + 6 * (ft_strchr("xX", flags->conversion) != NULL);
 	j = 0;
 	lst = NULL;
 	flags->negative = (i < 0);
@@ -71,7 +71,6 @@ t_listchar	*pointer(unsigned long i, t_flags *flags)
 		return (string("0x0", flags));
 	}
 	lst = NULL;
-	i += -2 * i * (i < 0);
 	while (i)
 	{
 		if (!ft_lstcharadd_front(&lst,
