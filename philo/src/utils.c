@@ -1,16 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   util.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/07 16:16:43 by padam             #+#    #+#             */
-/*   Updated: 2024/01/11 14:20:22 by padam            ###   ########.fr       */
+/*   Created: 2024/01/11 14:21:01 by padam             #+#    #+#             */
+/*   Updated: 2024/01/11 14:22:43 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+
+static int	ft_isdigit(int c)
+{
+	if (c >= 48 && c <= 57)
+		return (1);
+	return (0);
+}
 
 static int	ft_isspace(char c)
 {
@@ -43,4 +49,21 @@ int	ft_atoi(const char *str)
 		str++;
 	}
 	return ((int)(number * negative));
+}
+
+int	ft_isnumber(char *str)
+{
+	if (!str)
+		return (0);
+	if (*str == '-' || *str == '+')
+		str++;
+	if (!*str)
+		return (0);
+	while (*str)
+	{
+		if (*str < '0' || *str > '9')
+			return (0);
+		str++;
+	}
+	return (1);
 }
