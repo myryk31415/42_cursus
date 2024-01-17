@@ -6,14 +6,14 @@
 #    By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/09 15:34:56 by padam             #+#    #+#              #
-#    Updated: 2024/01/14 14:53:18 by padam            ###   ########.fr        #
+#    Updated: 2024/01/14 15:48:15 by padam            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = push_swap
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g $(INCLUDES)
+CFLAGS = -Wall -Wextra -Werror $(INCLUDES)
 INCLUDES = -I./includes
 LIBFT_DIR = libft
 
