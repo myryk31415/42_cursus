@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 10:16:22 by padam             #+#    #+#             */
-/*   Updated: 2024/01/14 15:37:37 by padam            ###   ########.fr       */
+/*   Updated: 2024/01/22 13:15:59 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,23 +36,23 @@ static void	send_char(char c, pid_t pid)
 	i = 0;
 	while (i < 8)
 	{
+		usleep(15);
 		if (c & 1)
 		{
 			if (kill(pid, SIGUSR1) == -1)
 				stop_client("Error: could not send signal");
 		}
-		else
-			if (kill(pid, SIGUSR2) == -1)
-				stop_client("Error: could not send signal");
-		usleep(1000);
+		else if (kill(pid, SIGUSR2) == -1)
+			stop_client("Error: could not send signal");
+		pause();
 		c >>= 1;
 		i++;
 	}
 }
 
-static void	signal_handler(int signal)
+static void	do_nothing(int signal)
 {
-	signal++;
+	signal = signal + 1 - 1;
 }
 
 static void	set_signal_action(void)
@@ -60,7 +60,7 @@ static void	set_signal_action(void)
 	struct sigaction	sa;
 
 	ft_bzero(&sa, sizeof(sa));
-	sa.sa_handler = signal_handler;
+	sa.sa_handler = do_nothing;
 	sigemptyset(&sa.sa_mask);
 	if (sigaction(SIGUSR1, &sa, NULL) == -1)
 		stop_client("Error: could not set signal action");
@@ -75,7 +75,7 @@ static void	set_signal_action(void)
  */
 int	main(int argc, char **argv)
 {
-	int	pid;
+	pid_t	pid;
 
 	if (argc != 3 || ft_strlen(argv[1]) > 8 || !ft_isnumber(argv[1]))
 		stop_client("Usage: ./client [server PID] [message]");
@@ -86,5 +86,6 @@ int	main(int argc, char **argv)
 		send_char(*argv[2], pid);
 		argv[2]++;
 	}
+	stop_client("Message sent");
 	return (0);
 }

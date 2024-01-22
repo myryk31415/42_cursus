@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 10:15:29 by padam             #+#    #+#             */
-/*   Updated: 2024/01/14 15:38:42 by padam            ###   ########.fr       */
+/*   Updated: 2024/01/22 13:18:29 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,27 +34,27 @@ static void	stop_server(char *message)
  */
 static void	signal_handler(int signal, siginfo_t *info, void *context)
 {
-	static char	c = 0;
-	static int	i = 0;
+	static char		c = 0;
+	static int		i = 0;
+	static pid_t	pid = 0;
 
-	context++;
+	context = NULL;
 	i++;
 	if (signal == SIGUSR1)
 		c |= 1 << (i - 1);
 	else if (signal == SIGUSR2)
 		c |= 0 << (i - 1);
-	else
-		stop_server("Error: invalid signal received");
 	if (i == 8)
 	{
-		ft_printf("%c", c);
+		ft_putchar(c);
 		c = 0;
 		i = 0;
-		if (kill(info->si_pid, SIGUSR2) == -1)
-			stop_server("Error: could not send signal");
 	}
-	else if (kill(info->si_pid, SIGUSR1) == -1)
-		stop_server("Error: could not send signal");
+	if (info->si_pid > 0)
+		pid = info->si_pid;
+	usleep(20);
+	if (kill(pid, SIGUSR1) == -1)
+		stop_server("Error: could not send signal to client");
 }
 
 /**
