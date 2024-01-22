@@ -6,7 +6,7 @@
 #    By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/09 15:34:56 by padam             #+#    #+#              #
-#    Updated: 2024/01/11 14:23:15 by padam            ###   ########.fr        #
+#    Updated: 2024/01/22 14:40:37 by padam            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ INCLUDES = -I./includes
 SRC_PATH = src
 OBJ_PATH = obj
 
-SRCS = main.c utils.c
+SRCS = main.c philosopher.c utils.c
 OBJ_NAME = $(SRCS:.c=.o)
 OBJS = $(addprefix $(OBJ_PATH)/,$(OBJ_NAME))
 

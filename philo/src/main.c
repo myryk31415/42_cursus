@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 13:53:19 by padam             #+#    #+#             */
-/*   Updated: 2024/01/11 15:15:48 by padam            ###   ########.fr       */
+/*   Updated: 2024/01/22 14:23:06 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static int	input_check(int argc, char **argv)
 
 static int	start_threads(t_parameters params)
 {
-	int	i;
+	int		i;
 	t_fork	*forks;
 
 	i = 0;
