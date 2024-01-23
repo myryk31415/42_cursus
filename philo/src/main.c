@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 13:53:19 by padam             #+#    #+#             */
-/*   Updated: 2024/01/22 14:23:06 by padam            ###   ########.fr       */
+/*   Updated: 2024/01/23 17:10:25 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,22 +33,38 @@ static int	input_check(int argc, char **argv)
 	return (0);
 }
 
+/**
+ * @brief Starts a thread for each philosopher, passing it its parameters.
+ * @param params Input parameters of the simulation
+*/
 static int	start_threads(t_parameters params)
 {
 	int		i;
 	t_fork	*forks;
+	t_philo	philo;
 
 	i = 0;
 	forks = malloc(sizeof(t_fork) * params.nb_philo);
 	if (!forks)
 		return (1);
+	params.start_time = get_time_ms();
+	philo.nb_eat = 0;
+	philo.params = params;
+	philo.last_eat = params.start_time;
 	while (i < params.nb_philo)
 	{
-
+		philo.id = i;
+		philo.left_fork = &forks[i];
+		philo.right_fork = &forks[(i + 1) % params.nb_philo];
+		pthread_create(&philo.thread, NULL, philosopher, &philo);
 	}
 	return (0);
 }
 
+/**
+ * @brief Simulates philosophers eating, sleeping and thinking.
+ * Each philospher is a thread, they share forks protected by mutexes.
+*/
 int	main(int argc, char **argv)
 {
 	t_parameters	params;
