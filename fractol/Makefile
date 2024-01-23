@@ -6,7 +6,7 @@
 #    By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/09 15:34:56 by padam             #+#    #+#              #
-#    Updated: 2023/12/31 00:26:13 by padam            ###   ########.fr        #
+#    Updated: 2024/01/14 15:47:57 by padam            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,9 +18,9 @@ LIBMLX_DIR = ./MLX42
 HEADERS	:= -I $(LIBMLX_DIR)/include -I fractol.h
 LIBFT_DIR = libft
 #MacOS
-#LIBMLX = $(LIBMLX_DIR)/build/libmlx42.a -ldl -lglfw -pthread -lm -framework Cocoa -framework OpenGL -framework IOKit
+LIBMLX = $(LIBMLX_DIR)/build/libmlx42.a -ldl -lglfw -pthread -lm -framework Cocoa -framework OpenGL -framework IOKit
 #Linux
-LIBMLX = $(LIBMLX_DIR)/build/libmlx42.a -lXext -lX11 -lm -lbsd -lglfw -lpthread
+#LIBMLX = $(LIBMLX_DIR)/build/libmlx42.a -lXext -lX11 -lm -lbsd -lglfw -lpthread
 
 all: $(NAME)
 
