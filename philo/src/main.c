@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 13:53:19 by padam             #+#    #+#             */
-/*   Updated: 2024/01/23 17:10:25 by padam            ###   ########.fr       */
+/*   Updated: 2024/01/24 17:38:22 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ static int	input_check(int argc, char **argv)
 	{
 		if (ft_isnumber(argv[i]) == 0 || ft_atoi(argv[i]) < 0)
 			return (1);
+		i++;
 	}
 	if (ft_atoi(argv[1]) == 0)
 		return (1);
@@ -35,28 +36,38 @@ static int	input_check(int argc, char **argv)
 
 /**
  * @brief Starts a thread for each philosopher, passing it its parameters.
- * @param params Input parameters of the simulation
+ * @param simulation Input parameters of the simulation
 */
-static int	start_threads(t_parameters params)
+static int	start_threads(t_simulation *simulation)
 {
-	int		i;
-	t_fork	*forks;
-	t_philo	philo;
+	int			i;
+	t_fork		*forks;
+	pthread_t	*thread;
+	t_philo		*philos;
 
 	i = 0;
-	forks = malloc(sizeof(t_fork) * params.nb_philo);
-	if (!forks)
+	forks = malloc(sizeof(t_fork) * simulation->nb_philo);
+	thread = malloc(sizeof(pthread_t) * simulation->nb_philo);
+	philos = malloc(sizeof(t_philo) * simulation->nb_philo);
+	if (!forks || !thread || !philos)
 		return (1);
-	params.start_time = get_time_ms();
-	philo.nb_eat = 0;
-	philo.params = params;
-	philo.last_eat = params.start_time;
-	while (i < params.nb_philo)
+	simulation->start_time = get_time_ms();
+	while (i < simulation->nb_philo)
 	{
-		philo.id = i;
-		philo.left_fork = &forks[i];
-		philo.right_fork = &forks[(i + 1) % params.nb_philo];
-		pthread_create(&philo.thread, NULL, philosopher, &philo);
+		philos[i].nb_eat = 0;
+		philos[i].simulation = simulation;
+		philos[i].last_eat = simulation->start_time;
+		philos[i].last_sleep = simulation->start_time;
+		philos[i].id = i + 1;
+		forks[i].available = 1;
+		pthread_mutex_init(&forks[i].mutex, NULL);
+		philos[i].left_fork = &forks[i];
+		philos[i].right_fork = &forks[(i + 1) % simulation->nb_philo];
+		philos[i].thread = &thread[i];
+		philos[i].state = THINKING;
+		pthread_create(&thread[i], NULL, philosopher, &philos[i]);
+		pthread_detach(thread[i]);
+		i++;
 	}
 	return (0);
 }
@@ -67,17 +78,13 @@ static int	start_threads(t_parameters params)
 */
 int	main(int argc, char **argv)
 {
-	t_parameters	params;
+	t_simulation	simulation;
 
 	if (input_check(argc, argv))
 		return (1);
-	params.nb_philo = ft_atoi(argv[1]);
-	params.time_to_die = ft_atoi(argv[2]);
-	params.time_to_eat = ft_atoi(argv[3]);
-	params.time_to_sleep = ft_atoi(argv[4]);
-	if (argc == 6)
-		params.nb_eat = ft_atoi(argv[5]);
-	else
-		params.nb_eat = -1;
+	initialize_simulation(&simulation, argc, argv);
+	start_threads(&simulation);
+	while (1)
+		;
 	return (0);
 }
