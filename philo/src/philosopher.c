@@ -6,17 +6,39 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 14:40:09 by padam             #+#    #+#             */
-/*   Updated: 2024/01/24 17:32:04 by padam            ###   ########.fr       */
+/*   Updated: 2024/01/25 14:40:37 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+// void	print_state(t_philo *philo, t_state state)
+// {
+// 	pthread_mutex_lock(&philo->simulation->print_mutex);
+// 	printf("%ld %d", get_time_ms() - philo->simulation->start_time, philo->id);
+// 	if (state == FORK_TAKEN)
+// 		printf(" has taken a fork\n");
+// 	else if (state == EATING)
+// 		printf(" is eating\n");
+// 	else if (state == SLEEPING)
+// 		printf(" is sleeping\n");
+// 	else if (state == THINKING)
+// 		printf(" is thinking\n");
+// 	else if (state == DEAD)
+// 	{
+// 		printf(" died\n");
+// 		stop_simulation();
+// 	}
+// 	pthread_mutex_unlock(&philo->simulation->print_mutex);
+// }
+
 void	print_state(t_philo *philo, t_state state)
 {
-	//might have to add mutex to printf
+	long	time;
+
+	time = get_time_ms() - philo->simulation->start_time;
 	pthread_mutex_lock(&philo->simulation->print_mutex);
-	printf("%ld %d", get_time_ms() - philo->simulation->start_time, philo->id);
+	printf("%ld %d", time, philo->id);
 	if (state == FORK_TAKEN)
 		printf(" has taken a fork\n");
 	else if (state == EATING)
@@ -26,11 +48,10 @@ void	print_state(t_philo *philo, t_state state)
 	else if (state == THINKING)
 		printf(" is thinking\n");
 	else if (state == DEAD)
-	{
 		printf(" died\n");
-		stop_simulation();
-	}
 	pthread_mutex_unlock(&philo->simulation->print_mutex);
+	if (state == DEAD)
+		stop_simulation();
 }
 
 /**
@@ -89,8 +110,13 @@ void	*philosopher(void *philo_in)
 	philo = (t_philo *)(philo_in);
 	while (1)
 	{
-		if (philo->simulation->stop == 1)
+		if (philo->simulation->nb_eat_done >= philo->simulation->nb_philo)
+		{
+			pthread_mutex_lock(&philo->simulation->nb_eat_done_mutex);
+			philo->simulation->nb_eat_done++;
+			pthread_mutex_unlock(&philo->simulation->nb_eat_done_mutex);
 			return (NULL);
+		}
 		if (get_time_ms() - philo->last_eat > philo->simulation->time_to_die)
 			print_state(philo, DEAD);
 		else if (philo->state == THINKING && grab_forks(philo))
@@ -101,6 +127,14 @@ void	*philosopher(void *philo_in)
 		else if (philo->state == EATING && get_time_ms() - philo->last_eat
 			> philo->simulation->time_to_eat)
 		{
+			if (philo->simulation->nb_eat != -1)
+				philo->nb_eat++;
+			if (philo->nb_eat == philo->simulation->nb_eat)
+			{
+				pthread_mutex_lock(&philo->simulation->nb_eat_done_mutex);
+				philo->simulation->nb_eat_done++;
+				pthread_mutex_unlock(&philo->simulation->nb_eat_done_mutex);
+			}
 			return_forks(philo);
 			philo->state = SLEEPING;
 			philo->last_sleep = get_time_ms();
@@ -112,5 +146,5 @@ void	*philosopher(void *philo_in)
 			philo->state = THINKING;
 		}
 	}
-	return (0);
+	return (NULL);
 }

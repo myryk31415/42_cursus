@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 13:53:19 by padam             #+#    #+#             */
-/*   Updated: 2024/01/24 17:38:22 by padam            ###   ########.fr       */
+/*   Updated: 2024/01/25 14:31:18 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,23 @@ int	main(int argc, char **argv)
 
 	if (input_check(argc, argv))
 		return (1);
+	if (argc == 6 && ft_atoi(argv[5]) == 0)
+		return (0);
 	initialize_simulation(&simulation, argc, argv);
 	start_threads(&simulation);
 	while (1)
+		if (simulation.nb_eat_done == simulation.nb_philo)
+		{
+			pthread_mutex_lock(&simulation.print_mutex);
+			printf("\n\n\n");
+			printf("%ldms %d philosophers ate %d times each\n",
+				get_time_ms() - simulation.start_time, simulation.nb_philo,
+				simulation.nb_eat);
+			printf("\n\n\n");
+			pthread_mutex_unlock(&simulation.print_mutex);
+			break;
+		}
+	while(simulation.nb_eat_done < simulation.nb_philo * 2)
 		;
 	return (0);
 }
