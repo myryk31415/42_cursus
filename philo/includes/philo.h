@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 14:02:02 by padam             #+#    #+#             */
-/*   Updated: 2024/01/25 14:24:01 by padam            ###   ########.fr       */
+/*   Updated: 2024/01/29 13:50:44 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_simulation
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				nb_eat;
+	int				died;
 	long			start_time;
 	pthread_mutex_t	nb_eat_done_mutex;
 	int				nb_eat_done;
@@ -67,4 +68,5 @@ void	*philosopher(void *philo);
 //utils
 void	stop_simulation(void);
 long	get_time_ms(void);
+void	sleep_ms(long ms);
 void	initialize_simulation(t_simulation *simulation, int argc, char **argv);

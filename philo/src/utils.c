@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 15:43:41 by padam             #+#    #+#             */
-/*   Updated: 2024/01/24 16:57:43 by padam            ###   ########.fr       */
+/*   Updated: 2024/01/29 13:53:17 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,21 @@ long	get_time_ms(void)
 }
 
 /**
+ * @brief sleps using usleep, the last 5ms it tests in 100µs intervals
+ * @param ms time to sleep in milliseconds
+*/
+void	sleep_ms(long ms)
+{
+	long	start;
+
+	start = get_time_ms();
+	if (ms > 5)
+		usleep((ms - 5) * 1000);
+	while (get_time_ms() - start < ms)
+		usleep(100);
+}
+
+/**
  * @brief Takes the input numbers and stores them in the simulation struct
 */
 void	initialize_simulation(t_simulation *simulation, int argc, char **argv)
@@ -51,3 +66,4 @@ void	initialize_simulation(t_simulation *simulation, int argc, char **argv)
 	if (pthread_mutex_init(&simulation->nb_eat_done_mutex, NULL) != 0)
 		stop_simulation();
 }
+

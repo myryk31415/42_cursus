@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 14:40:09 by padam             #+#    #+#             */
-/*   Updated: 2024/01/25 14:40:37 by padam            ###   ########.fr       */
+/*   Updated: 2024/01/29 13:49:26 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,26 +32,24 @@
 // 	pthread_mutex_unlock(&philo->simulation->print_mutex);
 // }
 
-void	print_state(t_philo *philo, t_state state)
+void	print_state(t_philo *philo)
 {
 	long	time;
 
 	time = get_time_ms() - philo->simulation->start_time;
 	pthread_mutex_lock(&philo->simulation->print_mutex);
 	printf("%ld %d", time, philo->id);
-	if (state == FORK_TAKEN)
+	if (philo->state == FORK_TAKEN)
 		printf(" has taken a fork\n");
-	else if (state == EATING)
+	else if (philo->state == EATING)
 		printf(" is eating\n");
-	else if (state == SLEEPING)
+	else if (philo->state == SLEEPING)
 		printf(" is sleeping\n");
-	else if (state == THINKING)
+	else if (philo->state == THINKING)
 		printf(" is thinking\n");
-	else if (state == DEAD)
+	else if (philo->state == DEAD)
 		printf(" died\n");
 	pthread_mutex_unlock(&philo->simulation->print_mutex);
-	if (state == DEAD)
-		stop_simulation();
 }
 
 /**
@@ -74,11 +72,15 @@ int	grab_forks(t_philo *philo)
 	{
 		philo->left_fork->available = 0;
 		philo->right_fork->available = 0;
+		philo->state = FORK_TAKEN;
 		pthread_mutex_unlock(&philo->left_fork->mutex);
+		print_state(philo);
 		pthread_mutex_unlock(&philo->right_fork->mutex);
-		print_state(philo, FORK_TAKEN);
-		print_state(philo, FORK_TAKEN);
-		print_state(philo, EATING);
+		print_state(philo);
+		philo->state = EATING;
+		print_state(philo);
+		philo->last_eat = get_time_ms();
+		sleep_ms(philo->simulation->time_to_eat);
 		return (1);
 	}
 }
@@ -96,7 +98,10 @@ void	return_forks(t_philo *philo)
 	philo->right_fork->available = 1;
 	pthread_mutex_unlock(&philo->left_fork->mutex);
 	pthread_mutex_unlock(&philo->right_fork->mutex);
-	print_state(philo, SLEEPING);
+	philo->state = SLEEPING;
+	print_state(philo);
+	philo->last_sleep = get_time_ms();
+	sleep_ms(philo->simulation->time_to_sleep);
 }
 
 /**
@@ -110,6 +115,12 @@ void	*philosopher(void *philo_in)
 	philo = (t_philo *)(philo_in);
 	while (1)
 	{
+		usleep(100);
+		if (philo->simulation->died == 1)
+		{
+			philo->simulation->nb_eat_done++;
+			return (NULL);
+		}
 		if (philo->simulation->nb_eat_done >= philo->simulation->nb_philo)
 		{
 			pthread_mutex_lock(&philo->simulation->nb_eat_done_mutex);
@@ -118,12 +129,13 @@ void	*philosopher(void *philo_in)
 			return (NULL);
 		}
 		if (get_time_ms() - philo->last_eat > philo->simulation->time_to_die)
-			print_state(philo, DEAD);
-		else if (philo->state == THINKING && grab_forks(philo))
 		{
-			philo->state = EATING;
-			philo->last_eat = get_time_ms();
+			philo->state = DEAD;
+			print_state(philo);
+			philo->simulation->died = 1;
 		}
+		else if (philo->state == THINKING && grab_forks(philo))
+			philo->state = EATING;
 		else if (philo->state == EATING && get_time_ms() - philo->last_eat
 			> philo->simulation->time_to_eat)
 		{
@@ -137,13 +149,12 @@ void	*philosopher(void *philo_in)
 			}
 			return_forks(philo);
 			philo->state = SLEEPING;
-			philo->last_sleep = get_time_ms();
 		}
 		else if (philo->state == SLEEPING && get_time_ms() - philo->last_sleep
 			> philo->simulation->time_to_sleep)
 		{
-			print_state(philo, THINKING);
 			philo->state = THINKING;
+			print_state(philo);
 		}
 	}
 	return (NULL);

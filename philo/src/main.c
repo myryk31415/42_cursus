@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 13:53:19 by padam             #+#    #+#             */
-/*   Updated: 2024/01/25 14:31:18 by padam            ###   ########.fr       */
+/*   Updated: 2024/01/29 13:45:13 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	main(int argc, char **argv)
 			pthread_mutex_unlock(&simulation.print_mutex);
 			break;
 		}
-	while(simulation.nb_eat_done < simulation.nb_philo * 2)
+	while(simulation.nb_eat_done < simulation.nb_philo * 2 && simulation.died == 0)
 		;
 	return (0);
 }
