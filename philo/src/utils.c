@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 15:43:41 by padam             #+#    #+#             */
-/*   Updated: 2024/01/29 13:53:17 by padam            ###   ########.fr       */
+/*   Updated: 2024/01/29 16:11:24 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,12 @@ void	initialize_simulation(t_simulation *simulation, int argc, char **argv)
 	else
 		simulation->nb_eat = -1;
 	simulation->nb_eat_done = 0;
+	simulation->died = 0;
+	simulation->nb_quit = 0;
 	if (pthread_mutex_init(&simulation->print_mutex, NULL) != 0)
 		stop_simulation();
 	if (pthread_mutex_init(&simulation->nb_eat_done_mutex, NULL) != 0)
 		stop_simulation();
+	if (pthread_mutex_init(&simulation->nb_quit_mutex, NULL) != 0)
+		stop_simulation();
 }
-

@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 13:53:19 by padam             #+#    #+#             */
-/*   Updated: 2024/01/29 13:58:34 by padam            ###   ########.fr       */
+/*   Updated: 2024/01/29 16:13:50 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,19 +85,17 @@ int	main(int argc, char **argv)
 		return (0);
 	initialize_simulation(&simulation, argc, argv);
 	start_threads(&simulation);
-	while (1)
-		if (simulation.nb_eat_done == simulation.nb_philo)
-		{
-			pthread_mutex_lock(&simulation.print_mutex);
-			printf("\n\n\n");
-			printf("%ldms %d philosophers ate %d times each\n",
-				get_time_ms() - simulation.start_time, simulation.nb_philo,
-				simulation.nb_eat);
-			printf("\n\n\n");
-			pthread_mutex_unlock(&simulation.print_mutex);
-			break;
-		}
-	while(simulation.nb_eat_done < simulation.nb_philo * 2 && simulation.died == 0)
+	while (simulation.died == 0
+		&& simulation.nb_eat_done != simulation.nb_philo)
+		;
+	pthread_mutex_lock(&simulation.print_mutex);
+	printf("\n\n\n");
+	printf("%ldms %d philosophers ate %d times each\n",
+		get_time_ms() - simulation.start_time, simulation.nb_philo,
+		simulation.nb_eat);
+	printf("\n\n\n");
+	pthread_mutex_unlock(&simulation.print_mutex);
+	while (simulation.nb_quit < simulation.nb_philo)
 		;
 	return (0);
 }

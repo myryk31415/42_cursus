@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 14:02:02 by padam             #+#    #+#             */
-/*   Updated: 2024/01/29 13:56:51 by padam            ###   ########.fr       */
+/*   Updated: 2024/01/29 16:10:00 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ typedef enum e_state
 	EATING,
 	SLEEPING,
 	DEAD,
-	FORK_TAKEN,
+	TAKE_FORK,
 }	t_state;
 
 typedef struct s_simulation
@@ -36,6 +36,8 @@ typedef struct s_simulation
 	long			start_time;
 	pthread_mutex_t	nb_eat_done_mutex;
 	int				nb_eat_done;
+	pthread_mutex_t	nb_quit_mutex;
+	int				nb_quit;
 	pthread_mutex_t	print_mutex;
 }	t_simulation;
 
@@ -45,8 +47,8 @@ typedef struct s_philo
 	int				nb_eat;
 	long			last_eat;
 	long			last_sleep;
-	pthread_mutex_t		*left_fork;
-	pthread_mutex_t		*right_fork;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
 	t_simulation	*simulation;
 	pthread_t		*thread;
 	t_state			state;
@@ -56,7 +58,13 @@ typedef struct s_philo
 int		ft_atoi(const char *str);
 int		ft_isnumber(char *str);
 
+//philo_actions
+int		philo_eat(t_philo *philo);
+int		philo_sleep(t_philo *philo);
+int		philo_think(t_philo *philo);
+
 //philosopher
+void	print_state(t_philo *philo);
 void	*philosopher(void *philo);
 
 //utils
