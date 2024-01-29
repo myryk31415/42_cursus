@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 14:02:02 by padam             #+#    #+#             */
-/*   Updated: 2024/01/29 13:50:44 by padam            ###   ########.fr       */
+/*   Updated: 2024/01/29 13:56:51 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,6 @@ typedef enum e_state
 	DEAD,
 	FORK_TAKEN,
 }	t_state;
-
-typedef struct s_fork
-{
-	int				available;
-	pthread_mutex_t	mutex;
-}	t_fork;
 
 typedef struct s_simulation
 {
@@ -51,8 +45,8 @@ typedef struct s_philo
 	int				nb_eat;
 	long			last_eat;
 	long			last_sleep;
-	t_fork			*left_fork;
-	t_fork			*right_fork;
+	pthread_mutex_t		*left_fork;
+	pthread_mutex_t		*right_fork;
 	t_simulation	*simulation;
 	pthread_t		*thread;
 	t_state			state;

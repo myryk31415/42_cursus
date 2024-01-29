@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 13:53:19 by padam             #+#    #+#             */
-/*   Updated: 2024/01/29 13:45:13 by padam            ###   ########.fr       */
+/*   Updated: 2024/01/29 13:58:34 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,13 @@ static int	input_check(int argc, char **argv)
 */
 static int	start_threads(t_simulation *simulation)
 {
-	int			i;
-	t_fork		*forks;
-	pthread_t	*thread;
-	t_philo		*philos;
+	int				i;
+	pthread_mutex_t	*forks;
+	pthread_t		*thread;
+	t_philo			*philos;
 
 	i = 0;
-	forks = malloc(sizeof(t_fork) * simulation->nb_philo);
+	forks = malloc(sizeof(pthread_mutex_t) * simulation->nb_philo);
 	thread = malloc(sizeof(pthread_t) * simulation->nb_philo);
 	philos = malloc(sizeof(t_philo) * simulation->nb_philo);
 	if (!forks || !thread || !philos)
@@ -59,8 +59,7 @@ static int	start_threads(t_simulation *simulation)
 		philos[i].last_eat = simulation->start_time;
 		philos[i].last_sleep = simulation->start_time;
 		philos[i].id = i + 1;
-		forks[i].available = 1;
-		pthread_mutex_init(&forks[i].mutex, NULL);
+		pthread_mutex_init(&forks[i], NULL);
 		philos[i].left_fork = &forks[i];
 		philos[i].right_fork = &forks[(i + 1) % simulation->nb_philo];
 		philos[i].thread = &thread[i];
