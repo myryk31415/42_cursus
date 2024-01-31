@@ -6,18 +6,33 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 15:43:41 by padam             #+#    #+#             */
-/*   Updated: 2024/01/29 16:11:24 by padam            ###   ########.fr       */
+/*   Updated: 2024/01/31 20:28:16 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
 /**
+ * @brief frees allocated memory and destroys mutexes
+*/
+void	clean_up(pthread_mutex_t *forks, pthread_t *thread, t_philo *philos, int nb_mutex_destroy)
+{
+	pthread_mutex_destroy(&philos->simulation->print_mutex);
+	pthread_mutex_destroy(&philos->simulation->nb_eat_done_mutex);
+	pthread_mutex_destroy(&philos->simulation->nb_quit_mutex);
+	while (nb_mutex_destroy)
+		pthread_mutex_destroy(&forks[--nb_mutex_destroy]);
+	free(forks);
+	free(thread);
+	free(philos);
+}
+
+void	stop_simulation(pthread_mutex_t *forks, pthread_t *thread, t_philo *philos, int nb_mutex_destroy)
+/**
  * @brief exits the program cleanly
 */
-void	stop_simulation(void)
 {
-	write(1, "Error\n", 6);
+	clean_up(forks, thread, philos, nb_mutex_destroy);
 	exit(1);
 }
 
@@ -63,10 +78,17 @@ void	initialize_simulation(t_simulation *simulation, int argc, char **argv)
 	simulation->nb_eat_done = 0;
 	simulation->died = 0;
 	simulation->nb_quit = 0;
-	if (pthread_mutex_init(&simulation->print_mutex, NULL) != 0)
-		stop_simulation();
-	if (pthread_mutex_init(&simulation->nb_eat_done_mutex, NULL) != 0)
-		stop_simulation();
-	if (pthread_mutex_init(&simulation->nb_quit_mutex, NULL) != 0)
-		stop_simulation();
+	if (pthread_mutex_init(&simulation->print_mutex, NULL))
+		exit (1);
+	if (pthread_mutex_init(&simulation->nb_eat_done_mutex, NULL))
+	{
+		pthread_mutex_destroy(&simulation->print_mutex);
+		exit (1);
+	}
+	if (pthread_mutex_init(&simulation->nb_quit_mutex, NULL))
+	{
+		pthread_mutex_destroy(&simulation->print_mutex);
+		pthread_mutex_destroy(&simulation->nb_eat_done_mutex);
+		exit (1);
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 14:02:02 by padam             #+#    #+#             */
-/*   Updated: 2024/01/29 16:10:00 by padam            ###   ########.fr       */
+/*   Updated: 2024/01/31 20:20:41 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct s_simulation
 	pthread_mutex_t	nb_quit_mutex;
 	int				nb_quit;
 	pthread_mutex_t	print_mutex;
+	int				error;
 }	t_simulation;
 
 typedef struct s_philo
@@ -68,7 +69,8 @@ void	print_state(t_philo *philo);
 void	*philosopher(void *philo);
 
 //utils
-void	stop_simulation(void);
+void	clean_up(pthread_mutex_t *forks, pthread_t *thread, t_philo *philos, int nb_mutex_destroy);
+void	stop_simulation(pthread_mutex_t *forks, pthread_t *thread, t_philo *philos, int nb_mutex_destroy);
 long	get_time_ms(void);
 void	sleep_ms(long ms);
 void	initialize_simulation(t_simulation *simulation, int argc, char **argv);

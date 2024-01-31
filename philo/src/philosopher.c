@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 14:40:09 by padam             #+#    #+#             */
-/*   Updated: 2024/01/29 16:24:20 by padam            ###   ########.fr       */
+/*   Updated: 2024/01/31 20:20:15 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ void	print_state(t_philo *philo)
 	long	time;
 
 	time = get_time_ms() - philo->simulation->start_time;
-	pthread_mutex_lock(&philo->simulation->print_mutex);
+	if (pthread_mutex_lock(&philo->simulation->print_mutex))
+		philo->simulation->error = 1;
 	printf("%ld %d", time, philo->id);
 	if (philo->state == TAKE_FORK)
 		printf(" has taken a fork\n");
@@ -32,7 +33,8 @@ void	print_state(t_philo *philo)
 		printf(" is thinking\n");
 	else if (philo->state == DEAD)
 		printf(" died\n");
-	pthread_mutex_unlock(&philo->simulation->print_mutex);
+	if (pthread_mutex_unlock(&philo->simulation->print_mutex))
+		philo->simulation->error = 1;
 }
 
 /**
@@ -66,8 +68,10 @@ void	*philosopher(void *philo_in)
 		if (is_end_of_sim(philo) || philo_think(philo))
 			break ;
 	}
-	pthread_mutex_lock(&philo->simulation->nb_quit_mutex);
+	if (pthread_mutex_lock(&philo->simulation->nb_quit_mutex))
+		philo->simulation->error = 1;
 	philo->simulation->nb_quit++;
-	pthread_mutex_unlock(&philo->simulation->nb_quit_mutex);
+	if (pthread_mutex_unlock(&philo->simulation->nb_quit_mutex))
+		philo->simulation->error = 1;
 	return (NULL);
 }
