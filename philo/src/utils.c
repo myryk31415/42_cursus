@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 15:43:41 by padam             #+#    #+#             */
-/*   Updated: 2024/01/31 20:28:16 by padam            ###   ########.fr       */
+/*   Updated: 2024/02/01 16:34:55 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 /**
  * @brief frees allocated memory and destroys mutexes
 */
-void	clean_up(pthread_mutex_t *forks, pthread_t *thread, t_philo *philos, int nb_mutex_destroy)
+void	clean_up(pthread_mutex_t *forks, pthread_t *thread,
+			t_philo *philos, int nb_mutex_destroy)
 {
 	pthread_mutex_destroy(&philos->simulation->print_mutex);
 	pthread_mutex_destroy(&philos->simulation->nb_eat_done_mutex);
@@ -27,7 +28,8 @@ void	clean_up(pthread_mutex_t *forks, pthread_t *thread, t_philo *philos, int nb
 	free(philos);
 }
 
-void	stop_simulation(pthread_mutex_t *forks, pthread_t *thread, t_philo *philos, int nb_mutex_destroy)
+void	stop_simulation(pthread_mutex_t *forks, pthread_t *thread,
+			t_philo *philos, int nb_mutex_destroy)
 /**
  * @brief exits the program cleanly
 */
@@ -59,7 +61,7 @@ void	sleep_ms(long ms)
 	if (ms > 5)
 		usleep((ms - 5) * 1000);
 	while (get_time_ms() - start < ms)
-		usleep(100);
+		usleep(200);
 }
 
 /**

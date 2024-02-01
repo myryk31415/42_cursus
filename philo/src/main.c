@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 13:53:19 by padam             #+#    #+#             */
-/*   Updated: 2024/01/31 20:22:33 by padam            ###   ########.fr       */
+/*   Updated: 2024/02/01 16:21:05 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ static int	start_threads(t_simulation *simulation)
 	if (!forks || !thread || !philos)
 		stop_simulation(forks, thread, philos, 0);
 	simulation->start_time = get_time_ms();
+	if (pthread_mutex_init(&forks[0], NULL))
+		stop_simulation(forks, thread, philos, 1);
 	while (i < simulation->nb_philo)
 	{
 		philos[i].nb_eat = 0;
@@ -62,15 +64,16 @@ static int	start_threads(t_simulation *simulation)
 		philos[i].last_eat = simulation->start_time;
 		philos[i].last_sleep = simulation->start_time;
 		philos[i].id = i + 1;
-		if 	(pthread_mutex_init(&forks[i], NULL))
-			stop_simulation(forks, thread, philos, i - 1);
+		if ((i + 1) != simulation->nb_philo
+			&& pthread_mutex_init(&forks[i + 1], NULL))
+			stop_simulation(forks, thread, philos, i + 1);
 		philos[i].left_fork = &forks[i];
 		philos[i].right_fork = &forks[(i + 1) % simulation->nb_philo];
 		philos[i].thread = &thread[i];
 		philos[i].state = THINKING;
 		if (pthread_create(&thread[i], NULL, philosopher, &philos[i]))
 			stop_simulation(forks, thread, philos, i);
-		if(pthread_detach(thread[i]))
+		if (pthread_detach(thread[i]))
 			stop_simulation(forks, thread, philos, i);
 		i++;
 	}
