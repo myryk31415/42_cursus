@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 13:53:19 by padam             #+#    #+#             */
-/*   Updated: 2024/02/01 16:21:05 by padam            ###   ########.fr       */
+/*   Updated: 2024/02/04 19:26:35 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,23 @@ static int	start_threads(t_simulation *simulation)
 	}
 	while (simulation->died == 0
 		&& simulation->nb_eat_done != simulation->nb_philo)
+	{
+		i = 0;
+		usleep(500);
+		while (i < simulation->nb_philo && simulation->died == 0)
+		{
+			if (get_time_ms() - philos[i].last_eat
+				> simulation->time_to_die)
+			{
+				philos[i].state = DEAD;
+				print_state(&philos[i]);
+				simulation->died = 1;
+			}
+			i++;
+		}
 		if (simulation->error == 1)
 			stop_simulation(forks, thread, philos, simulation->nb_philo);
+	}
 	while (simulation->nb_quit < simulation->nb_philo)
 		if (simulation->error == 1)
 			stop_simulation(forks, thread, philos, simulation->nb_philo);
@@ -97,6 +112,7 @@ int	main(int argc, char **argv)
 	t_simulation	simulation;
 
 	simulation.error = 0;
+	simulation.died = 0;
 	if (input_check(argc, argv))
 		return (1);
 	if (argc == 6 && ft_atoi(argv[5]) == 0)

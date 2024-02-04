@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:53:03 by padam             #+#    #+#             */
-/*   Updated: 2024/02/01 16:09:36 by padam            ###   ########.fr       */
+/*   Updated: 2024/02/04 11:40:08 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,22 @@ static int	will_starve(t_philo *philo, long ms)
 /**
  * @brief locks the philosopher's forks
 */
-static void	take_forks(t_philo *philo)
+static int	take_forks(t_philo *philo)
 {
 	philo->state = TAKE_FORK;
 	if (pthread_mutex_lock(philo->left_fork)
 		|| pthread_mutex_lock(philo->right_fork))
 		philo->simulation->error = 1;
+	if (philo->simulation->died)
+	{
+		if (pthread_mutex_unlock(philo->left_fork)
+			|| pthread_mutex_unlock(philo->right_fork))
+			philo->simulation->error = 1;
+		return (1);
+	}
 	print_state(philo);
 	print_state(philo);
+	return (0);
 }
 
 /**
@@ -48,7 +56,8 @@ static void	take_forks(t_philo *philo)
 */
 int	philo_eat(t_philo *philo)
 {
-	take_forks(philo);
+	if (take_forks(philo))
+		return (1);
 	philo->state = EATING;
 	print_state(philo);
 	philo->last_eat = get_time_ms();

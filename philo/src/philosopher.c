@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 14:40:09 by padam             #+#    #+#             */
-/*   Updated: 2024/01/31 20:20:15 by padam            ###   ########.fr       */
+/*   Updated: 2024/02/04 11:38:43 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,11 @@ void	*philosopher(void *philo_in)
 	philo = (t_philo *)(philo_in);
 	while (philo->simulation->nb_eat_done < philo->simulation->nb_philo)
 	{
-		if (is_end_of_sim(philo) || philo_eat(philo))
+		if (philo_eat(philo) || is_end_of_sim(philo))
 			break ;
-		if (is_end_of_sim(philo) || philo_sleep(philo))
+		if (philo_sleep(philo) || is_end_of_sim(philo))
 			break ;
-		if (is_end_of_sim(philo) || philo_think(philo))
+		if (philo_think(philo) || is_end_of_sim(philo))
 			break ;
 	}
 	if (pthread_mutex_lock(&philo->simulation->nb_quit_mutex))
