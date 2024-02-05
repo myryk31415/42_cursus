@@ -6,28 +6,28 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:53:03 by padam             #+#    #+#             */
-/*   Updated: 2024/02/04 11:40:08 by padam            ###   ########.fr       */
+/*   Updated: 2024/02/05 15:33:56 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static int	will_starve(t_philo *philo, long ms)
-{
-	long	time_till_starve;
+// static int	will_starve(t_philo *philo, long ms)
+// {
+// 	long	time_till_starve;
 
-	time_till_starve = philo->last_eat + philo->simulation->time_to_die
-		- get_time_ms();
-	if (ms > time_till_starve)
-	{
-		sleep_ms(time_till_starve);
-		philo->state = DEAD;
-		print_state(philo);
-		philo->simulation->died = 1;
-		return (1);
-	}
-	return (0);
-}
+// 	time_till_starve = philo->last_eat + philo->simulation->time_to_die
+// 		- get_time_ms();
+// 	if (ms > time_till_starve)
+// 	{
+// 		sleep_ms(time_till_starve);
+// 		philo->state = DEAD;
+// 		print_state(philo);
+// 		philo->simulation->died = 1;
+// 		return (1);
+// 	}
+// 	return (0);
+// }
 
 /**
  * @brief locks the philosopher's forks
@@ -61,8 +61,6 @@ int	philo_eat(t_philo *philo)
 	philo->state = EATING;
 	print_state(philo);
 	philo->last_eat = get_time_ms();
-	if (will_starve(philo, philo->simulation->time_to_eat))
-		return (1);
 	sleep_ms(philo->simulation->time_to_eat);
 	if (pthread_mutex_unlock(philo->left_fork)
 		|| pthread_mutex_unlock(philo->right_fork))
@@ -89,8 +87,6 @@ int	philo_sleep(t_philo *philo)
 	philo->state = SLEEPING;
 	print_state(philo);
 	philo->last_sleep = get_time_ms();
-	if (will_starve(philo, philo->simulation->time_to_sleep))
-		return (1);
 	sleep_ms(philo->simulation->time_to_sleep);
 	return (0);
 }

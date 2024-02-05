@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 13:53:19 by padam             #+#    #+#             */
-/*   Updated: 2024/02/04 19:26:35 by padam            ###   ########.fr       */
+/*   Updated: 2024/02/05 15:42:49 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ static int	start_threads(t_simulation *simulation)
 		stop_simulation(forks, thread, philos, 1);
 	while (i < simulation->nb_philo)
 	{
+		usleep(10);
 		philos[i].nb_eat = 0;
 		philos[i].simulation = simulation;
 		philos[i].last_eat = simulation->start_time;
@@ -117,6 +118,13 @@ int	main(int argc, char **argv)
 		return (1);
 	if (argc == 6 && ft_atoi(argv[5]) == 0)
 		return (0);
+	if (ft_atoi(argv[1]) == 1)
+	{
+		printf("0 1 has taken a fork\n");
+		sleep_ms(ft_atoi(argv[2]));
+		printf("%i 1 died\n", ft_atoi(argv[2]));
+		return (0);
+	}
 	initialize_simulation(&simulation, argc, argv);
 	start_threads(&simulation);
 	return (0);
