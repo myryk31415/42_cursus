@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 15:43:41 by padam             #+#    #+#             */
-/*   Updated: 2024/02/05 15:23:36 by padam            ###   ########.fr       */
+/*   Updated: 2024/02/06 18:43:41 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,27 @@
 /**
  * @brief frees allocated memory and destroys mutexes
 */
-void	clean_up(pthread_mutex_t *forks, pthread_t *thread,
-			t_philo *philos, int nb_mutex_destroy)
+void	clean_up(t_philo *philos, int nb_mutex_destroy)
 {
-	pthread_mutex_destroy(&philos->simulation->print_mutex);
-	pthread_mutex_destroy(&philos->simulation->nb_eat_done_mutex);
-	pthread_mutex_destroy(&philos->simulation->nb_quit_mutex);
-	while (nb_mutex_destroy)
-		pthread_mutex_destroy(&forks[--nb_mutex_destroy]);
-	free(forks);
-	free(thread);
-	free(philos);
+	if (philos)
+	{
+		pthread_mutex_destroy(&philos->simulation->print_mutex);
+		pthread_mutex_destroy(&philos->simulation->nb_eat_done_mutex);
+		pthread_mutex_destroy(&philos->simulation->nb_quit_mutex);
+		while (nb_mutex_destroy)
+			pthread_mutex_destroy(&philos->left_fork[--nb_mutex_destroy]);
+		free(philos->left_fork);
+		free(philos->thread);
+		free(philos);
+	}
 }
 
-void	stop_simulation(pthread_mutex_t *forks, pthread_t *thread,
-			t_philo *philos, int nb_mutex_destroy)
+void	stop_simulation(t_philo *philos, int nb_mutex_destroy)
 /**
  * @brief exits the program cleanly
 */
 {
-	clean_up(forks, thread, philos, nb_mutex_destroy);
+	clean_up(philos, nb_mutex_destroy);
 	exit(1);
 }
 

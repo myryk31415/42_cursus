@@ -6,7 +6,7 @@
 #    By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/09 15:34:56 by padam             #+#    #+#              #
-#    Updated: 2024/02/05 15:39:52 by padam            ###   ########.fr        #
+#    Updated: 2024/02/07 14:49:30 by padam            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ INCLUDES = -I./includes
 SRC_PATH = src
 OBJ_PATH = obj
 
-SRCS = libft_utils.c main.c philo_actions.c philosopher.c utils.c
+SRCS = libft_utils.c main.c philo_actions.c philosopher.c utils.c utils2.c
 OBJ_NAME = $(SRCS:.c=.o)
 OBJS = $(addprefix $(OBJ_PATH)/,$(OBJ_NAME))
 

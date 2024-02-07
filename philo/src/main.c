@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 13:53:19 by padam             #+#    #+#             */
-/*   Updated: 2024/02/05 15:42:49 by padam            ###   ########.fr       */
+/*   Updated: 2024/02/07 16:19:59 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,47 @@ static int	input_check(int argc, char **argv)
 	return (0);
 }
 
+static void	init_philo(pthread_mutex_t *forks, t_philo *philos,
+		t_simulation *simulation, int i)
+{
+	usleep(10);
+	philos[i].nb_eat = 0;
+	philos[i].simulation = simulation;
+	philos[i].last_eat = simulation->start_time;
+	philos[i].last_sleep = simulation->start_time;
+	philos[i].id = i + 1;
+	philos[i].state = THINKING;
+	if ((i + 1) != simulation->nb_philo
+		&& pthread_mutex_init(&forks[i + 1], NULL))
+		stop_simulation(philos, i + 1);
+	philos[i].left_fork = &forks[i];
+	philos[i].right_fork = &forks[(i + 1) % simulation->nb_philo];
+}
+
+/**
+ * @brief Checks if a philosopher has died or an error has occured.
+*/
+static void	simulation_watcher(t_simulation *simulation, t_philo *philos)
+{
+	int	i;
+
+	i = 0;
+	usleep(500);
+	while (i < simulation->nb_philo && simulation->died == 0)
+	{
+		if (get_time_ms() - philos[i].last_eat
+			> simulation->time_to_die)
+		{
+			simulation->died = 1;
+			philos[i].state = DEAD;
+			print_state(&philos[i]);
+		}
+		i++;
+	}
+	if (simulation->error == 1)
+		stop_simulation(philos, simulation->nb_philo);
+}
+
 /**
  * @brief Starts a thread for each philosopher, passing it its parameters.
  * @param simulation Input parameters of the simulation
@@ -42,65 +83,28 @@ static int	start_threads(t_simulation *simulation)
 {
 	int				i;
 	pthread_mutex_t	*forks;
-	pthread_t		*thread;
+	pthread_t		*threads;
 	t_philo			*philos;
 
 	i = 0;
-	forks = NULL;
-	thread = NULL;
-	philos = NULL;
-	forks = malloc(sizeof(pthread_mutex_t) * simulation->nb_philo);
-	thread = malloc(sizeof(pthread_t) * simulation->nb_philo);
-	philos = malloc(sizeof(t_philo) * simulation->nb_philo);
-	if (!forks || !thread || !philos)
-		stop_simulation(forks, thread, philos, 0);
+	malloc_vars(&forks, &threads, &philos, simulation->nb_philo);
 	simulation->start_time = get_time_ms();
-	if (pthread_mutex_init(&forks[0], NULL))
-		stop_simulation(forks, thread, philos, 1);
 	while (i < simulation->nb_philo)
 	{
-		usleep(10);
-		philos[i].nb_eat = 0;
-		philos[i].simulation = simulation;
-		philos[i].last_eat = simulation->start_time;
-		philos[i].last_sleep = simulation->start_time;
-		philos[i].id = i + 1;
-		if ((i + 1) != simulation->nb_philo
-			&& pthread_mutex_init(&forks[i + 1], NULL))
-			stop_simulation(forks, thread, philos, i + 1);
-		philos[i].left_fork = &forks[i];
-		philos[i].right_fork = &forks[(i + 1) % simulation->nb_philo];
-		philos[i].thread = &thread[i];
-		philos[i].state = THINKING;
-		if (pthread_create(&thread[i], NULL, philosopher, &philos[i]))
-			stop_simulation(forks, thread, philos, i);
-		if (pthread_detach(thread[i]))
-			stop_simulation(forks, thread, philos, i);
+		init_philo(forks, philos, simulation, i);
+		philos[i].thread = &threads[i];
+		if (pthread_create(&threads[i], NULL, philosopher, &philos[i])
+			|| pthread_detach(threads[i]))
+			stop_simulation(philos, i);
 		i++;
 	}
 	while (simulation->died == 0
 		&& simulation->nb_eat_done != simulation->nb_philo)
-	{
-		i = 0;
-		usleep(500);
-		while (i < simulation->nb_philo && simulation->died == 0)
-		{
-			if (get_time_ms() - philos[i].last_eat
-				> simulation->time_to_die)
-			{
-				philos[i].state = DEAD;
-				print_state(&philos[i]);
-				simulation->died = 1;
-			}
-			i++;
-		}
-		if (simulation->error == 1)
-			stop_simulation(forks, thread, philos, simulation->nb_philo);
-	}
+		simulation_watcher(simulation, philos);
 	while (simulation->nb_quit < simulation->nb_philo)
 		if (simulation->error == 1)
-			stop_simulation(forks, thread, philos, simulation->nb_philo);
-	clean_up(forks, thread, philos, simulation->nb_philo);
+			stop_simulation(philos, simulation->nb_philo);
+	clean_up(philos, simulation->nb_philo);
 	return (0);
 }
 
