@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:53:03 by padam             #+#    #+#             */
-/*   Updated: 2024/02/05 15:33:56 by padam            ###   ########.fr       */
+/*   Updated: 2024/04/19 13:48:11 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,19 @@ static int	take_forks(t_philo *philo)
 	if (pthread_mutex_lock(philo->left_fork)
 		|| pthread_mutex_lock(philo->right_fork))
 		philo->simulation->error = 1;
+	if (pthread_mutex_lock(&philo->simulation->died_mutex))
+		philo->simulation->error = 1;
 	if (philo->simulation->died)
 	{
 		if (pthread_mutex_unlock(philo->left_fork)
 			|| pthread_mutex_unlock(philo->right_fork))
 			philo->simulation->error = 1;
+		if (pthread_mutex_unlock(&philo->simulation->died_mutex))
+			philo->simulation->error = 1;
 		return (1);
 	}
+	if (pthread_mutex_unlock(&philo->simulation->died_mutex))
+		philo->simulation->error = 1;
 	print_state(philo);
 	print_state(philo);
 	return (0);

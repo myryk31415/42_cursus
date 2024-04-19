@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 13:53:19 by padam             #+#    #+#             */
-/*   Updated: 2024/02/07 16:19:59 by padam            ###   ########.fr       */
+/*   Updated: 2024/04/19 13:51:18 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,11 @@ static void	simulation_watcher(t_simulation *simulation, t_philo *philos)
 		if (get_time_ms() - philos[i].last_eat
 			> simulation->time_to_die)
 		{
+			if (pthread_mutex_lock(&philos[i].simulation->died_mutex))
+				simulation->error = 1;
 			simulation->died = 1;
+			if (pthread_mutex_unlock(&philos[i].simulation->died_mutex))
+				simulation->error = 1;
 			philos[i].state = DEAD;
 			print_state(&philos[i]);
 		}
