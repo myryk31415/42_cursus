@@ -6,14 +6,14 @@
 #    By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/09 15:34:56 by padam             #+#    #+#              #
-#    Updated: 2024/01/29 15:57:08 by padam            ###   ########.fr        #
+#    Updated: 2024/05/01 23:10:44 by padam            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror $(INCLUDES)
+CFLAGS = -g -pthread -Wall -Wextra -Werror $(INCLUDES)
 INCLUDES = -I./includes
 
 SRC_PATH = src
