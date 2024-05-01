@@ -6,26 +6,26 @@
 #    By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/09 15:34:56 by padam             #+#    #+#              #
-#    Updated: 2024/01/14 15:47:57 by padam            ###   ########.fr        #
+#    Updated: 2024/03/29 22:09:53 by padam            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = fractol
 SRCS = main.c utils.c utils2.c fractals.c hooks.c
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 LIBMLX_DIR = ./MLX42
-HEADERS	:= -I $(LIBMLX_DIR)/include -I fractol.h
-LIBFT_DIR = libft
+HEADERS	:= -I $(LIBMLX_DIR)/include -I.
+LIBFT_DIR = ./libft
 #MacOS
-LIBMLX = $(LIBMLX_DIR)/build/libmlx42.a -ldl -lglfw -pthread -lm -framework Cocoa -framework OpenGL -framework IOKit
+#LIBMLX = $(LIBMLX_DIR)/build/libmlx42.a -ldl -lglfw -pthread -lm -framework Cocoa -framework OpenGL -framework IOKit
 #Linux
-#LIBMLX = $(LIBMLX_DIR)/build/libmlx42.a -lXext -lX11 -lm -lbsd -lglfw -lpthread
+LIBMLX = $(LIBMLX_DIR)/build/libmlx42.a -lXext -lX11 -lm -lbsd -lglfw -lpthread
 
 all: $(NAME)
 
 $(NAME): $(LIBFT_DIR)/libft.a $(SRCS) $(LIBMLX_DIR)
-	$(CC) -o $(NAME) $(CFLAGS) $(SRCS) $(HEADERS) -L $(LIBFT_DIR) -lft $(LIBMLX)
+	$(CC) -o $(NAME) $(CFLAGS) $(SRCS) $(HEADERS) -lft $(LIBMLX) -L $(LIBFT_DIR)
 
 $(LIBFT_DIR)/libft.a:
 	make -C $(LIBFT_DIR)
