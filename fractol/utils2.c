@@ -6,11 +6,12 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 13:59:44 by padam             #+#    #+#             */
-/*   Updated: 2023/11/24 18:26:13 by padam            ###   ########.fr       */
+/*   Updated: 2024/03/29 22:17:27 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fractol.h"
+#include "stdint.h"
 
 void	put_parameters(void)
 {
@@ -91,7 +92,7 @@ static int	new_iterationcount(mlx_t *mlx, t_flags *flags)
 
 void	new_image(t_flags *flags)
 {
-	int32_t		i;
+	// uint32_t		i;
 	mlx_t		*mlx;
 
 	mlx = flags->mlx;
@@ -99,10 +100,10 @@ void	new_image(t_flags *flags)
 		mlx_delete_image(mlx, flags->img);
 	if (flags->iterationcount)
 	{
-		i = 0;
-		while ((u_int32_t)i < flags->img->height)
-			free(flags->iterationcount[i++]);
-		free(flags->iterationcount);
+		// i = 0;
+		// while (i < flags->img->height)
+		// 	free(flags->iterationcount[i++]);
+		// free(flags->iterationcount);
 	}
 	flags->img = mlx_new_image(mlx, mlx->width, mlx->height);
 	if (!flags->img)

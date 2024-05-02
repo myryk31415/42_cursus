@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 21:01:32 by padam             #+#    #+#             */
-/*   Updated: 2024/01/14 14:44:07 by padam            ###   ########.fr       */
+/*   Updated: 2024/03/29 22:20:55 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	get_color(double hue, t_flags *flags)
 	return (i);
 }
 
-void	set_color(int pixel, u_int32_t color, t_flags *flags)
+void	set_color(int pixel, uint32_t color, t_flags *flags)
 {
 	pixel *= 4;
 	flags->img->pixels[pixel] = color >> 16 & 0xFF;
@@ -55,14 +55,14 @@ int	initialize_flags(t_flags *flags)
 
 void	*stop_program(char *message, t_flags *flags)
 {
-	int	i;
+	uint32_t	i;
 
 	ft_putstr_fd(message, 2);
 	flags->error = 1;
 	if (flags->iterationcount)
 	{
 		i = 0;
-		while ((u_int32_t)i < flags->img->height)
+		while (i < flags->img->height)
 			free(flags->iterationcount[i++]);
 		free(flags->iterationcount);
 		flags->iterationcount = NULL;

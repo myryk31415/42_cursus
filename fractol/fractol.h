@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 18:30:10 by padam             #+#    #+#             */
-/*   Updated: 2023/11/24 17:52:59 by padam            ###   ########.fr       */
+/*   Updated: 2024/03/29 22:18:42 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	update_image(t_flags *flags);
 
 //utils
 int		get_color(double hue, t_flags *flags);
-void	set_color(int pixel, u_int32_t color, t_flags *flags);
+void	set_color(int pixel, uint32_t color, t_flags *flags);
 int		initialize_flags(t_flags *flags);
 void	*stop_program(char *message, t_flags *flags);
 void	new_image(t_flags *flags);
