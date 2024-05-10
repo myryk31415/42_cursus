@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 14:02:02 by padam             #+#    #+#             */
-/*   Updated: 2024/02/07 14:52:19 by padam            ###   ########.fr       */
+/*   Updated: 2024/04/19 13:41:02 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_simulation
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				nb_eat;
+	pthread_mutex_t	died_mutex;
 	int				died;
 	long			start_time;
 	pthread_mutex_t	nb_eat_done_mutex;

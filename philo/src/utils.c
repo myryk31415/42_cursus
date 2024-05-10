@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 15:43:41 by padam             #+#    #+#             */
-/*   Updated: 2024/02/06 18:43:41 by padam            ###   ########.fr       */
+/*   Updated: 2024/04/19 13:43:45 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	clean_up(t_philo *philos, int nb_mutex_destroy)
 		pthread_mutex_destroy(&philos->simulation->print_mutex);
 		pthread_mutex_destroy(&philos->simulation->nb_eat_done_mutex);
 		pthread_mutex_destroy(&philos->simulation->nb_quit_mutex);
+		pthread_mutex_destroy(&philos->simulation->died_mutex);
 		while (nb_mutex_destroy)
 			pthread_mutex_destroy(&philos->left_fork[--nb_mutex_destroy]);
 		free(philos->left_fork);
@@ -92,6 +93,13 @@ void	initialize_simulation(t_simulation *simulation, int argc, char **argv)
 	{
 		pthread_mutex_destroy(&simulation->print_mutex);
 		pthread_mutex_destroy(&simulation->nb_eat_done_mutex);
+		exit (1);
+	}
+	if (pthread_mutex_init(&simulation->died_mutex, NULL))
+	{
+		pthread_mutex_destroy(&simulation->print_mutex);
+		pthread_mutex_destroy(&simulation->nb_eat_done_mutex);
+		pthread_mutex_destroy(&simulation->nb_quit_mutex);
 		exit (1);
 	}
 }

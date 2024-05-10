@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 10:16:22 by padam             #+#    #+#             */
-/*   Updated: 2024/01/22 13:15:59 by padam            ###   ########.fr       */
+/*   Updated: 2024/02/05 13:50:37 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static void	send_char(char c, pid_t pid)
 
 static void	do_nothing(int signal)
 {
-	signal = signal + 1 - 1;
+	(void)signal;
 }
 
 static void	set_signal_action(void)
